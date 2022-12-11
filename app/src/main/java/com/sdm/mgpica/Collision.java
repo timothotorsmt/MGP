@@ -19,4 +19,13 @@ public class Collision {
 
         return true;
     }
+
+    // TODO: Actually try to see if it works
+    public static boolean AABBtoAABB (float minx1, float miny1, float maxx1, float maxy1, float minx2, float miny2, float maxx2, float maxy2)
+    {
+        if (maxx1 < minx2 || minx1 > maxx2) return false;
+        if (maxy1 < miny2 || miny1 > maxy2) return false;
+
+        return true;
+    }
 }

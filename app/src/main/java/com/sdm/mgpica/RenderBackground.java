@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
+import java.util.LinkedList;
+
 
 public class RenderBackground implements EntityBase {
     boolean isDone = false;
@@ -15,6 +17,11 @@ public class RenderBackground implements EntityBase {
     private Bitmap bmp3 = null;
     private float xPos = 0, yPos = 0, yPos1 = 0, yPos2 = 0, yPos3;
     private float playerY = 0;
+
+    // Singleton Instance
+    private LinkedList<BlockEntity> platforms = new LinkedList<>();
+    float timer = 0;
+    float nextTimerInterval = 1.0f;
 
     int ScreenWidth, ScreenHeight;
     private Bitmap scaledbmp = null; // will be a scaled version of the bmp based on the screenWidth and Height
@@ -46,6 +53,7 @@ public class RenderBackground implements EntityBase {
         scaledbmp2 = Bitmap.createScaledBitmap(bmp2, ScreenWidth, ScreenHeight, true);
         scaledbmp3 = Bitmap.createScaledBitmap(bmp3, ScreenWidth, ScreenHeight, true);
 
+        timer = 0;
     }
     public void Update(float _dt) {
         if (GameSystem.Instance.GetIsPaused())
@@ -82,6 +90,29 @@ public class RenderBackground implements EntityBase {
             //    yPos3 = 0;
             //}
         //}
+
+        timer += _dt;
+        if (timer > nextTimerInterval) {
+            nextTimerInterval = (float)Math.random() * (3.0f) + 2.0f;
+            int scale = (int)(Math.random() * (3));
+            timer = 0;
+            int b = (int)(Math.random() * (ScreenWidth / 4 * 3));
+
+            System.out.print(b);
+            BlockEntity be = BlockEntity.Create();
+            be.SetScale(scale);
+            be.Setoffset(b);
+
+            platforms.add(be);
+        }
+
+        for (BlockEntity be: platforms) {
+            be.Update(_dt);
+            if (be.GetPosY() > -50) {
+                // delete the platform because it's offscreen
+                platforms.remove(be);
+            }
+        }
     }
     public void Render(Canvas _canvas) {
         _canvas.drawBitmap(scaledbmp, xPos, yPos, null);
@@ -95,6 +126,11 @@ public class RenderBackground implements EntityBase {
 
         _canvas.drawBitmap(scaledbmp3, xPos, yPos3, null);
         _canvas.drawBitmap(scaledbmp3, xPos, (yPos3 + ScreenHeight), null);
+
+        for (BlockEntity be: platforms) {
+            be.Render(_canvas);
+            System.out.print("Rendered");
+        }
     }
 
     public boolean IsInit() {

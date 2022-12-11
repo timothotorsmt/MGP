@@ -17,7 +17,8 @@ public interface EntityBase
         ENT_DEFAULT,
          ENT_SMURF,
          ENT_PAUSE,
-         ENT_TEXT
+         ENT_TEXT,
+         ENT_BLOCKS
     }
 
     boolean IsDone();

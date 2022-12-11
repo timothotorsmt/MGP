@@ -21,10 +21,11 @@ public class MainGameSceneState implements StateBase {
     {
         RenderBackground.Create();
         RenderTextEntity.Create();
-        SmurfEntity.Create();
-        StarEntity.Create(); // Week 8
+        //SmurfEntity.Create();
+        //StarEntity.Create(); // Week 8
         PauseButtonEntity.Create(); // Week 8
         // Example to include another Renderview for Pause Button
+        //BlockEntity.Create();
     }
 
     @Override
@@ -45,7 +46,6 @@ public class MainGameSceneState implements StateBase {
         EntityManager.Instance.Update(_dt);
 
         if (TouchManager.Instance.IsDown()) {
-			
             //Example of touch on screen in the main game to trigger back to Main menu
             //StateManager.Instance.ChangeState("Mainmenu");
         }
