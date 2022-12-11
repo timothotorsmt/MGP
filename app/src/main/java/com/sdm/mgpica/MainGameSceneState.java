@@ -22,8 +22,8 @@ public class MainGameSceneState implements StateBase {
         RenderBackground.Create();
         RenderTextEntity.Create();
         SmurfEntity.Create();
-        //StarEntity.Create(); // Week 8
-        //PauseButtonEntity.Create(); // Week 8
+        StarEntity.Create(); // Week 8
+        PauseButtonEntity.Create(); // Week 8
         // Example to include another Renderview for Pause Button
     }
 

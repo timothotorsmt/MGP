@@ -64,16 +64,13 @@ public class PauseButtonEntity implements EntityBase {
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
                         TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)
                         && buttonDelay >= 0.25) {
-
                     Paused = true;
+                    GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
                 }
-                GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
-
             }
-
+            else
+                Paused = false;
         }
-        else
-            Paused = false;
     }
 
     public void Render(Canvas _canvas) {
