@@ -54,7 +54,6 @@ public class PauseButtonEntity implements EntityBase {
     }
 
     public void Update(float _dt) {
-
         buttonDelay += _dt;
 
         if (TouchManager.Instance.HasTouch()){
@@ -68,9 +67,9 @@ public class PauseButtonEntity implements EntityBase {
                     GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
                 }
             }
-            else
-                Paused = false;
         }
+        else
+            Paused = false;
     }
 
     public void Render(Canvas _canvas) {
