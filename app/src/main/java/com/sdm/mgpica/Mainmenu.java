@@ -19,6 +19,7 @@ public class Mainmenu extends Activity implements OnClickListener, StateBase {  
     //Define buttons
     private Button btn_start;
     private Button btn_settings;
+    private Button btn_quit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,9 @@ public class Mainmenu extends Activity implements OnClickListener, StateBase {  
 
         btn_settings = (Button)findViewById(R.id.settingsButton);
         btn_settings.setOnClickListener(this); //Set Listener to this button --> Start Button
+
+        btn_quit = (Button)findViewById(R.id.quitButton);
+        btn_quit.setOnClickListener(this);
 
         StateManager.Instance.AddState(new Mainmenu());
     }
@@ -65,30 +69,32 @@ public class Mainmenu extends Activity implements OnClickListener, StateBase {  
             intent.setClass(this, Settings.class);
                 StateManager.Instance.ChangeState("Settings"); // Default is like a loading page
         }
-
+        if (v == btn_quit)
+        {
+            finish();
+            System.exit(0);
+        }
         startActivity(intent);
-
     }
 
     @Override
     public void Render(Canvas _canvas)
     {
-        EntityManager.Instance.Render(_canvas);
     }
 
     @Override
     public void OnEnter(SurfaceView _view) {
-        RenderBackground.Create();
+
     }
 
     @Override
     public void OnExit() {
-        EntityManager.Instance.Clean();
+
     }
 	
     @Override
     public void Update(float _dt) {
-        EntityManager.Instance.Update(_dt);
+
     }
 	
     @Override

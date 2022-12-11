@@ -14,6 +14,7 @@ public class RenderBackground implements EntityBase {
     private Bitmap bmp2 = null;
     private Bitmap bmp3 = null;
     private float xPos = 0, yPos = 0, yPos1 = 0, yPos2 = 0, yPos3;
+    private float playerY = 0;
 
     int ScreenWidth, ScreenHeight;
     private Bitmap scaledbmp = null; // will be a scaled version of the bmp based on the screenWidth and Height
@@ -47,25 +48,40 @@ public class RenderBackground implements EntityBase {
 
     }
     public void Update(float _dt) {
-        yPos -= _dt * 100; // 500 is just a variable number; can be edited
-        if (yPos < -ScreenHeight) {
-            yPos = 0;
-        }
+        if (GameSystem.Instance.GetIsPaused())
+            return;
 
-        yPos1 -= _dt * 300; // 500 is just a variable number; can be edited
-        if (yPos1 < -ScreenHeight) {
-            yPos1 = 0;
+        if (TouchManager.Instance.IsDown())
+            playerY -= _dt * 150;
+        else {
+            if (playerY < 0) {
+                playerY += _dt * 75;
+                if (playerY > 0)
+                    playerY = 0;
+            }
         }
-
-        yPos2 -= _dt * 500; // 500 is just a variable number; can be edited
-        if (yPos2 < -ScreenHeight) {
-            yPos2 = 0;
-        }
-
-        yPos3 -= _dt * 700; // 500 is just a variable number; can be edited
-        if (yPos3 < -ScreenHeight) {
-            yPos3 = 0;
-        }
+        //if (!TouchManager.Instance.IsDown()) {
+            yPos = (playerY%ScreenHeight);
+            //yPos -= _dt * 100; // 500 is just a variable number; can be edited
+            //if (yPos < -ScreenHeight) {
+            //    yPos = 0;
+            //}
+            yPos1 = (playerY%(ScreenHeight/3))*3;
+            //yPos1 -= _dt * 300; // 500 is just a variable number; can be edited
+            //if (yPos1 < -ScreenHeight) {
+            //    yPos1 = 0;
+            //}
+            yPos2 = (playerY%(ScreenHeight/5))*5;
+            //yPos2 -= _dt * 500; // 500 is just a variable number; can be edited
+            //if (yPos2 < -ScreenHeight) {
+            //    yPos2 = 0;
+            //}
+            yPos3 = (playerY%(ScreenHeight/7))*7;
+            //yPos3 -= _dt * 700; // 500 is just a variable number; can be edited
+            //if (yPos3 < -ScreenHeight) {
+            //    yPos3 = 0;
+            //}
+        //}
     }
     public void Render(Canvas _canvas) {
         _canvas.drawBitmap(scaledbmp, xPos, yPos, null);

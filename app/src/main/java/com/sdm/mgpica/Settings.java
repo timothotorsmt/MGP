@@ -44,21 +44,16 @@ public class Settings extends Activity implements OnClickListener, StateBase {  
         // Intent is an object provides runtime binding.
         // new instance of this object intent
 
-        Intent intent = new Intent();
-
         if (v == btn_back)
         {
+            finish();
             // intent --> to set to another class which another page or screen that we are launching.
-            intent.setClass(this, Mainmenu.class);
             StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
         }
-
-        startActivity(intent);
     }
 
     @Override
-    public void Render(Canvas _canvas)
-    {
+    public void Render(Canvas _canvas) {
     }
 
     @Override
