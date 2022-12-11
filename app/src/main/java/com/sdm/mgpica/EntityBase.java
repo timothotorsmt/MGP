@@ -16,6 +16,10 @@ public interface EntityBase
         //ENT_NEXT,
         ENT_DEFAULT,
          ENT_SMURF,
+         ENT_PLAYER,
+         ENT_L_BUTTON,
+         ENT_R_BUTTON,
+         ENT_ACTION_BUTTON,
          ENT_PAUSE,
          ENT_TEXT
     }

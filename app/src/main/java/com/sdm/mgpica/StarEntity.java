@@ -40,8 +40,6 @@ public class StarEntity implements EntityBase, Collidable{
         // New method using our own resource manager : Returns pre-loaded one if exists
         bmp = ResourceManager.Instance.GetBitmap(R.drawable.smurf_sprite);
 
- 
-
         isInit = true;
     }
 

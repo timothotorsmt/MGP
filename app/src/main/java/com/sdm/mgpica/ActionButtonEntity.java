@@ -1,0 +1,96 @@
+package com.sdm.mgpica;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.util.DisplayMetrics;
+import android.view.SurfaceView;
+
+public class ActionButtonEntity implements EntityBase {
+
+    private Bitmap bmp = null;
+    private Bitmap sbmp = null;
+
+    int ScreenWidth, ScreenHeight;
+
+    private float buttonDelay = 0;
+
+    private boolean isDone = false;
+    private int xPos, yPos;
+    private boolean Paused = false;
+
+    private boolean isInit = false;
+
+    public boolean IsDone() {
+        return isDone;
+    }
+
+    public void SetIsDone(boolean _isDone) {
+        isDone = _isDone;
+    }
+
+    public void Init(SurfaceView _view) {
+        bmp = BitmapFactory.decodeResource(_view.getResources(),
+                R.drawable.action_button);
+
+        DisplayMetrics metrics = _view.getResources().getDisplayMetrics();
+        ScreenWidth = metrics.widthPixels;
+        ScreenHeight = metrics.heightPixels;
+
+        // Scale is hardcode number -- Adjust your own 00
+        sbmp = Bitmap.createScaledBitmap(bmp, (int)(ScreenWidth)/3,
+                (int) (ScreenHeight)/6, true);
+
+        xPos = ScreenWidth - 220;
+        yPos = ScreenHeight - 150;
+
+        isInit = true;
+    }
+
+    public void Update(float _dt) {
+        buttonDelay += _dt;
+
+        if (TouchManager.Instance.HasTouch()){
+            if (TouchManager.Instance.IsDown() && !Paused) {
+                float imgRadius = sbmp.getHeight() * 0.5f;
+
+                if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
+                        TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)
+                        && buttonDelay >= 0.25) {
+                    PlayerEntity.Create().SetToJump();
+                    // Jump/Shoot
+                }
+            }
+        }
+        else
+            Paused = false;
+    }
+
+    public void Render(Canvas _canvas) {
+        _canvas.drawBitmap(sbmp, xPos - sbmp.getWidth() * 0.5f,
+                yPos - sbmp.getHeight() * 0.5f, null);
+    }
+
+    public boolean IsInit(){
+        return isInit;
+    }
+
+    public void SetRenderLayer(int _newLayer){
+        return;
+    }
+
+    public int GetRenderLayer(){
+        return LayerConstants.RENDERBUTTON_LAYER;
+    }
+
+    public EntityBase.ENTITY_TYPE GetEntityType(){
+
+        return ENTITY_TYPE.ENT_ACTION_BUTTON;
+    }
+
+    public static ActionButtonEntity Create(){
+        ActionButtonEntity result = new ActionButtonEntity();
+        EntityManager.Instance.AddEntity(result, ENTITY_TYPE.ENT_ACTION_BUTTON);
+        return result;
+    }
+}
