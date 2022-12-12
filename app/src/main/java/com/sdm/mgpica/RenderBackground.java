@@ -46,7 +46,7 @@ public class RenderBackground implements EntityBase {
         // get the screen size
         DisplayMetrics metrics = _view.getResources().getDisplayMetrics();
         ScreenWidth = metrics.widthPixels;
-        ScreenHeight = metrics.heightPixels;
+        ScreenHeight = metrics.heightPixels + 120;
 
         scaledbmp = Bitmap.createScaledBitmap(bmp, ScreenWidth, ScreenHeight, true);
         scaledbmp1 = Bitmap.createScaledBitmap(bmp1, ScreenWidth, ScreenHeight, true);
@@ -58,7 +58,7 @@ public class RenderBackground implements EntityBase {
     public void Update(float _dt) {
         if (GameSystem.Instance.GetIsPaused())
             return;
-
+        /*
         if (TouchManager.Instance.IsDown())
             playerY -= _dt * 150;
         else {
@@ -68,6 +68,8 @@ public class RenderBackground implements EntityBase {
                     playerY = 0;
             }
         }
+        */
+        playerY = -PlayerEntity.Create().GetPosY();
         //if (!TouchManager.Instance.IsDown()) {
             yPos = (playerY%ScreenHeight);
             //yPos -= _dt * 100; // 500 is just a variable number; can be edited
