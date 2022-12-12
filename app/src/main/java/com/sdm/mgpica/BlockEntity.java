@@ -50,11 +50,6 @@ public class BlockEntity implements EntityBase, Collidable {
             return;
 
         yPos -= _dt * 80;
-
-        if (TouchManager.Instance.HasTouch())
-        {
-
-        }
     }
 
     public void Setoffset (int NewxOffset) {
