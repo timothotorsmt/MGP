@@ -1,6 +1,7 @@
 package com.sdm.mgpica;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -48,8 +49,11 @@ public class MainGameSceneState implements StateBase {
 
         EntityManager.Instance.Update(_dt);
 
+        if (PlayerEntity.Create().GetHealth() <= 0)
+        {
+            GamePage.Instance.toLossScreen();
+        }
         if (TouchManager.Instance.IsDown()) {
-			
             //Example of touch on screen in the main game to trigger back to Main menu
             //StateManager.Instance.ChangeState("Mainmenu");
         }

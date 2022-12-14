@@ -17,6 +17,7 @@ public interface EntityBase
         ENT_DEFAULT,
          ENT_SMURF,
          ENT_PLAYER,
+         ENT_PROJECTILE,
          ENT_L_BUTTON,
          ENT_R_BUTTON,
          ENT_ACTION_BUTTON,

@@ -6,8 +6,7 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
-public class PlayerEntity implements EntityBase, Collidable {
-    private static PlayerEntity Instance = null;
+public class ProjectileEntity implements EntityBase, Collidable {
     // Comment for now and use if code from Slide no 7 is type in
     int ScreenWidth, ScreenHeight;
 
@@ -24,11 +23,6 @@ public class PlayerEntity implements EntityBase, Collidable {
     private boolean isMidair = true;
     private boolean isJumping = false;
 
-    // Temporary Jump Timer
-    private float JumpTimer = 0;
-
-    private int iHealth = 0;
-
     public boolean IsDone() {
         return isDone;
     }
@@ -42,8 +36,9 @@ public class PlayerEntity implements EntityBase, Collidable {
         ScreenWidth = metrics.widthPixels;
         ScreenHeight = metrics.heightPixels;
 
-        Instance.xPos = ScreenWidth/2;
-        Instance.yPos = 400;
+        xPos = (int) PlayerEntity.Create().GetPosX();
+        yPos = (int) PlayerEntity.Create().GetPosY();
+
         bmp = BitmapFactory.decodeResource(_view.getResources(),
                 R.drawable.tile_0300);
         sbmp = Bitmap.createScaledBitmap(bmp, (int)150,
@@ -56,27 +51,15 @@ public class PlayerEntity implements EntityBase, Collidable {
         spritesheet = new Sprite(sbmp,
                 1,1, 16);
 
-        iHealth = 100;
         isInit = true;
     }
+
     public void Update(float _dt) {
         if (GameSystem.Instance.GetIsPaused())
             return;
 
-        Instance.yPos += _dt * 150;
+        yPos += _dt * 750;
         spritesheet.Update(_dt);
-
-        if (isJumping)
-        {
-            JumpTimer -= _dt;
-            Instance.yPos -= _dt * 165;
-
-            if (JumpTimer < 0)
-            {
-                isJumping = false;
-                JumpTimer = 0;
-            }
-        }
         //if (TouchManager.Instance.HasTouch())
         //{
         //    float imgRadius = spritesheet.GetWidth() * 0.5f;
@@ -91,7 +74,7 @@ public class PlayerEntity implements EntityBase, Collidable {
     }
 
     public void Render(Canvas _canvas) {
-        spritesheet.Render(_canvas, xPos, 400);
+        spritesheet.Render(_canvas, xPos, (int) (400+yPos-PlayerEntity.Create().GetPosY()));
     }
 
     public boolean IsInit(){
@@ -104,25 +87,18 @@ public class PlayerEntity implements EntityBase, Collidable {
     }
 
     public int GetRenderLayer(){
-        return LayerConstants.RENDERPLAYER_LAYER;
+        return LayerConstants.RENDERPROJECTILE_LAYER;
     }
 
     public ENTITY_TYPE GetEntityType(){
 
-        return ENTITY_TYPE.ENT_PLAYER;
+        return ENTITY_TYPE.ENT_PROJECTILE;
     }
 
-    public static PlayerEntity Create(){
-        if (Instance == null) {
-            Instance = new PlayerEntity();
-            EntityManager.Instance.AddEntity(Instance, ENTITY_TYPE.ENT_PLAYER);
-        }
-        return Instance;
-    }
-
-    public void SetToJump(){
-        isJumping = true;
-        JumpTimer = 0.6f;
+    public static ProjectileEntity Create(){
+        ProjectileEntity result = new ProjectileEntity();
+        EntityManager.Instance.AddEntity(result,ENTITY_TYPE.ENT_PROJECTILE);
+        return result;
     }
 
     @Override
@@ -144,10 +120,6 @@ public class PlayerEntity implements EntityBase, Collidable {
         this.xPos = xPos;
     }
 
-    public int GetHealth() { return iHealth; }
-
-    public void SetHealth(int health) {iHealth = health;}
-
     @Override
     public float GetRadius() {
         return 0;
@@ -158,5 +130,3 @@ public class PlayerEntity implements EntityBase, Collidable {
 
     }
 }
-
-
