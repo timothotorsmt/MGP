@@ -58,6 +58,7 @@ public class ActionButtonEntity implements EntityBase {
                         TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)
                         && buttonDelay >= 0.25) {
                     PlayerEntity.Create().SetToJump();
+                    ProjectileEntity.Create();
                     // Jump/Shoot
                 }
             }

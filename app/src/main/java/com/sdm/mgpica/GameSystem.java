@@ -28,6 +28,7 @@ public class GameSystem {
         StateManager.Instance.AddState(new Mainmenu());
         StateManager.Instance.AddState(new MainGameSceneState());
         StateManager.Instance.AddState(new Settings());
+        StateManager.Instance.AddState(new Losescreen());
     }
 
     public void SetIsPaused(boolean _newIsPaused)
