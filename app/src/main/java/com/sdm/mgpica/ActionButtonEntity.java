@@ -19,13 +19,14 @@ public class ActionButtonEntity implements EntityBase {
     public LinkedList<ProjectileEntity> projectileEntities = new LinkedList<>();
 
     private boolean isDone = false;
-    private float timeBetweenShots = 500f;
+    private float timeBetweenShots = 0.1f;
     private float timer = 0;
     private int xPos, yPos;
     private boolean Paused = false;
     private boolean Toggle = true;
 
     private boolean isInit = false;
+    static ActionButtonEntity Instance = null;
 
     public boolean IsDone() {
         return isDone;
@@ -58,39 +59,35 @@ public class ActionButtonEntity implements EntityBase {
     public void Update(float _dt) {
         buttonDelay += _dt;
 
-        if (!Toggle) {
-            if (timer > timeBetweenShots) {
-                timer = 0;
-                Toggle = true;
-            } else {
-                timer += _dt;
-            }
-        }
-
         if (TouchManager.Instance.HasTouch()) {
             if (TouchManager.Instance.HasTouch() && !Paused) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
 
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
-                        TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)
-                        && buttonDelay >= 0.25) {
+                        TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)) {
                     if (!PlayerEntity.Create().isMidair) {
                         PlayerEntity.Create().SetToJump();
                     } else {
-                        if (Toggle) {
-                            Toggle = false;
+                        if (PlayerEntity.Create().AmmoNumber > 0) {
+                            if (timer > timeBetweenShots) {
+                                timer = 0;
 
-                            // Jump/Shoot
-                            ProjectileEntity pe = ProjectileEntity.Create();
-                            projectileEntities.add(pe);
-                            PlayerEntity.Create().SetStall();
+                                // Jump/Shoot
+                                ProjectileEntity pe = ProjectileEntity.Create();
+                                projectileEntities.add(pe);
+                                PlayerEntity.Create().AmmoNumber--;
+                                PlayerEntity.Create().SetStall();
+                            } else {
+                                timer += _dt;
+                            }
                         }
                     }
                 }
             }
         }
-        else
+        else {
             Paused = false;
+        }
     }
 
     public void Render(Canvas _canvas) {
@@ -115,9 +112,15 @@ public class ActionButtonEntity implements EntityBase {
         return ENTITY_TYPE.ENT_ACTION_BUTTON;
     }
 
-    public static ActionButtonEntity Create(){
-        ActionButtonEntity result = new ActionButtonEntity();
-        EntityManager.Instance.AddEntity(result, ENTITY_TYPE.ENT_ACTION_BUTTON);
-        return result;
+    public static ActionButtonEntity Create() {
+        if (Instance == null) {
+            Instance = new ActionButtonEntity();
+            EntityManager.Instance.AddEntity(Instance, ENTITY_TYPE.ENT_ACTION_BUTTON);
+        }
+        return Instance;
+    }
+
+    public void Destroy(){
+        Instance = null;
     }
 }

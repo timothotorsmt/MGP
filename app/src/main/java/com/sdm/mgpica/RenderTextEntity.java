@@ -35,10 +35,10 @@ public class RenderTextEntity implements EntityBase {
     public void Init(SurfaceView _view) {
 
         // default font type in android
-        myfont = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.NORMAL);
+        //myfont = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.NORMAL);
 
         // own font type
-        //myfont = Typeface.createFromFile("fonts/gemcutbold.otf");
+        myfont = Typeface.createFromAsset(_view.getContext().getAssets(), "monocraft.otf");
 
         isInit = true;
     }
@@ -60,11 +60,13 @@ public class RenderTextEntity implements EntityBase {
 
     public void Render(Canvas _canvas) {
         Paint paint = new Paint();
-        paint.setARGB(0, 0,0,0); // number range from 0-255
+        paint.setARGB(255, 255,255,255); // number range from 0-255
         paint.setStrokeWidth(200);
         paint.setTextSize(100);
         paint.setTypeface(myfont);
-        _canvas.drawText("Fuck this module", 30, 80 , paint);
+        _canvas.drawText("Health: " + PlayerEntity.Create().iHealth, 30, 80 , paint);
+        _canvas.drawText("Score: " + PlayerEntity.Create().iTotalScore, 30, 170 , paint);
+        _canvas.drawText("Ammo: " + PlayerEntity.Create().AmmoNumber, 30, 250 , paint);
     }
 
     public boolean IsInit(){

@@ -86,10 +86,10 @@ public class RenderBackground implements EntityBase {
             //}
         //}
 
-        if (PlayerEntity.Create().isMoving && !PlayerEntity.Create().isJumping) {
+        if (PlayerEntity.Create().isMoving && !PlayerEntity.Create().isJumping && !PlayerEntity.Create().isStalling) {
             timer += _dt;
             if (timer > nextTimerInterval) {
-                nextTimerInterval = (float)Math.random() * (3.0f) + 1.0f;
+                nextTimerInterval = (float)Math.random() * (5.0f) + 2.0f;
                 int scale = (int)(Math.random() * (3));
                 timer = 0;
                 int b = (int)(Math.random() * (ScreenWidth / 4 * 3));

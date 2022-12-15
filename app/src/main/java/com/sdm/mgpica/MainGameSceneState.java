@@ -1,6 +1,7 @@
 package com.sdm.mgpica;
 
 import android.app.Activity;
+import android.content.Entity;
 import android.graphics.Canvas;
 import android.content.Intent;
 import android.graphics.Color;
@@ -36,6 +37,8 @@ public class MainGameSceneState implements StateBase {
     @Override
     public void OnExit() {
         EntityManager.Instance.Clean();
+        PlayerEntity.Create().Destroy();
+        ActionButtonEntity.Create().Destroy();
         GamePage.Instance.finish();
     }
 
@@ -50,7 +53,7 @@ public class MainGameSceneState implements StateBase {
 
         EntityManager.Instance.Update(_dt);
 
-        if (PlayerEntity.Create().GetHealth() <= 0)
+        if (PlayerEntity.Create().iHealth <= 0)
         {
             GamePage.Instance.toLossScreen();
         }

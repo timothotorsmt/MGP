@@ -21,6 +21,9 @@ public class PlayerEntity implements EntityBase, Collidable {
     public int yPosOnScreen = 600;
     public int idealyPosOnScreen = 600;
 
+    public int AmmoNumber = 8;
+    public int MaxAmmoNumber = 8;
+
     private boolean isInit = false;
     private boolean hasTouched = false;
 
@@ -34,6 +37,9 @@ public class PlayerEntity implements EntityBase, Collidable {
     // Temporary Jump Timer
     private float JumpTimer = 0;
     public boolean isMoving = true;
+
+    public int iEnemyKillScore = 0;
+    public int iTotalScore = 0;
 
     public int iHealth = 0;
     public int width = 150;
@@ -51,8 +57,8 @@ public class PlayerEntity implements EntityBase, Collidable {
         ScreenWidth = metrics.widthPixels;
         ScreenHeight = metrics.heightPixels;
 
-        Instance.xPos = ScreenWidth/2;
-        Instance.yPos = yPosOnScreen;
+        xPos = ScreenWidth/2;
+        yPos = yPosOnScreen;
         bmp = BitmapFactory.decodeResource(_view.getResources(),
                 R.drawable.tile_0300);
         sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
@@ -66,6 +72,7 @@ public class PlayerEntity implements EntityBase, Collidable {
                 1,1, 16);
 
         iHealth = 100;
+        AmmoNumber = 8;
 
         isInit = true;
     }
@@ -121,6 +128,8 @@ public class PlayerEntity implements EntityBase, Collidable {
             Instance.yPos += _dt * speed;
         }
 
+        iTotalScore = (yPos/10) + iEnemyKillScore;
+
         //if (TouchManager.Instance.HasTouch())
         //{
         //    float imgRadius = spritesheet.GetWidth() * 0.5f;
@@ -137,10 +146,6 @@ public class PlayerEntity implements EntityBase, Collidable {
     public void Render(Canvas _canvas) {
         spritesheet.Render(_canvas, xPos, yPosOnScreen + 50);
     }
-
-    public int GetHealth() { return iHealth; }
-
-    public void SetHealth(int health) {iHealth = health;}
 
     public boolean IsInit(){
 
@@ -185,6 +190,11 @@ public class PlayerEntity implements EntityBase, Collidable {
         isMoving = false;
     }
 
+    public void Reset()
+    {
+        isInit = false;
+    }
+
     @Override
     public String GetType() {
         return null;
@@ -212,6 +222,10 @@ public class PlayerEntity implements EntityBase, Collidable {
     @Override
     public void OnHit(Collidable _other) {
 
+    }
+
+    public void Destroy(){
+        Instance = null;
     }
 }
 

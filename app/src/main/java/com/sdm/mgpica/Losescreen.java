@@ -53,6 +53,7 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
             intent.setClass(this, Mainmenu.class);
             StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
 
+            PlayerEntity.Create().iHealth = 100;
         }
         startActivity(intent);
     }

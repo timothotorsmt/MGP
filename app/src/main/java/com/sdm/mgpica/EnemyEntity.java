@@ -5,6 +5,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 
 public class EnemyEntity implements EntityBase, Collidable {
     // Comment for now and use if code from Slide no 7 is type in
@@ -16,6 +19,8 @@ public class EnemyEntity implements EntityBase, Collidable {
 
     private boolean isDone = false;
     private int xPos = 0, yPos = -50;
+
+    private Vibrator _vibrator;
 
     private boolean isInit = false;
     private boolean hasTouched = false;
@@ -42,11 +47,11 @@ public class EnemyEntity implements EntityBase, Collidable {
         ScreenWidth = metrics.widthPixels;
         ScreenHeight = metrics.heightPixels;
 
-        int x = (int)Math.random() * (ScreenWidth - width) + width / 2;
+        int x = (int)Math.random() * ScreenWidth;
         xPos = x;
         yPos = ScreenHeight + 50;
         bmp = BitmapFactory.decodeResource(_view.getResources(),
-                R.drawable.tile_0300);
+                R.drawable.enemy);
         sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
                 (int)width,true);
         //spritesheet = new Sprite(bmp, 4,4, 16);
@@ -57,6 +62,7 @@ public class EnemyEntity implements EntityBase, Collidable {
         spritesheet = new Sprite(sbmp,
                 1,1, 16);
         isInit = true;
+        _vibrator = (Vibrator)_view.getContext().getSystemService (_view.getContext().VIBRATOR_SERVICE);
     }
 
     public void Update(float _dt) {
@@ -92,29 +98,43 @@ public class EnemyEntity implements EntityBase, Collidable {
 
         //i could have used sphere to sphere wait...
         if (Collision.AABBtoAABB(playerAABB, enemyAABB)) {
-            if (enemyAABB.minY - playerAABB.minY > (playerAABB.height / 2)) {
+            startVibrate();
+            if (enemyAABB.minY - playerAABB.minY > ((playerAABB.height / 2) + 50)) {
                 // stomp and die bitch
                 PlayerEntity.Create().SetStall();
 
                 xPos = -100;
                 PlayerEntity.Create().isMidair = false;
+                PlayerEntity.Create().iEnemyKillScore += 300;
                 SetIsDone(true);
             } else {
                 if (PlayerEntity.Create().isDamagable) {
+                    //TODO: Set the damagability
                     PlayerEntity.Create().iHealth -= 25;
-                    PlayerEntity.Create().isDamagable = false;
+                    xPos = -100;
+                    SetIsDone(true);
+
                 }
             }
         }
 
         // TODO: figure out why this is lagging so fucking badly
         float imgRadius = width  * 0.5f;
-        //for (ProjectileEntity pe : ActionButtonEntity.Create().projectileEntities) {
-          //  if (Collision.SphereToSphere(xPos, yPos, imgRadius, pe.GetPosX(), pe.GetPosY(), pe.GetRadius())) {
-                //SetIsDone(true);
-                //pe.SetIsDone(true);
-            //}
-        //}
+        for (ProjectileEntity pe : ActionButtonEntity.Create().projectileEntities) {
+            AABB ProjectileAABB = new AABB();
+            ProjectileAABB.minX = pe.GetPosX();
+            ProjectileAABB.minY = PlayerEntity.Create().yPosOnScreen + pe.GetPosY() - PlayerEntity.Create().GetPosY();
+            ProjectileAABB.height = pe.width;
+            ProjectileAABB.width = pe.width;
+
+            if (Collision.AABBtoAABB(ProjectileAABB, enemyAABB)) {
+                startVibrate();
+                xPos = -100;
+                SetIsDone(true);
+                pe.SetPosX(-100);
+                pe.SetIsDone(true);
+            }
+        }
     }
 
     public void Render(Canvas _canvas) {
@@ -171,5 +191,18 @@ public class EnemyEntity implements EntityBase, Collidable {
     @Override
     public void OnHit(Collidable _other) {
 
+    }
+
+    public void startVibrate(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            _vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            _vibrator.vibrate(500);
+        }
+    }
+
+    public void stopVibrate(){
+        _vibrator.cancel();
     }
 }

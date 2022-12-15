@@ -74,13 +74,14 @@ public class BlockEntity implements EntityBase, Collidable {
         playerAABB.width = PlayerEntity.Create().width;
 
         AABB platformAABB = new AABB();
-        platformAABB.minX = xOffset;
         platformAABB.minY = ScreenHeight + yPos;
-        platformAABB.width = (ScreenWidth / (5 - (blockScale)));
+        platformAABB.width = (ScreenWidth / ((5 - (blockScale)) * 2));
+        platformAABB.minX = xOffset + (platformAABB.width);
         platformAABB.height = 50;
 
         if (Collision.AABBtoAABB(playerAABB, platformAABB)) {
             if (platformAABB.minY - playerAABB.minY > (playerAABB.height - 20)) {
+                PlayerEntity.Create().AmmoNumber = PlayerEntity.Create().MaxAmmoNumber;
                 return false;
             }
         }

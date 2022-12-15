@@ -41,11 +41,9 @@ public class PauseButtonEntity implements EntityBase {
         ScreenHeight = metrics.heightPixels;
 
         // Scale is hardcode number -- Adjust your own 00
-        sbmp = Bitmap.createScaledBitmap(bmp, (int)(ScreenWidth)/12,
-                (int) (ScreenHeight)/7,true);
+        sbmp = Bitmap.createScaledBitmap(bmp, 200, 200, true);
 
-        sbmp1 = Bitmap.createScaledBitmap(bmp1, (int)(ScreenWidth)/12,
-                (int) (ScreenHeight)/7,true);
+        sbmp1 = Bitmap.createScaledBitmap(bmp1, 200, 200, true);
 
         xPos = ScreenWidth - 150;
         yPos = 150;
