@@ -1,5 +1,7 @@
 package com.sdm.mgpica;
 
+// Written by Timothy Luk
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.DisplayMetrics;

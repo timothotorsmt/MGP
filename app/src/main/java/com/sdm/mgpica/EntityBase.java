@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.view.SurfaceView;
 
 // Created by TanSiewLan2021
+// Modified by TanSzeTing2022
+// Modified by Timothy Luk
 
 public interface EntityBase
 {

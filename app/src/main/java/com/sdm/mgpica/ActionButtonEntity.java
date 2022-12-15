@@ -1,5 +1,9 @@
 package com.sdm.mgpica;
 
+// Written by Tan Sze Ting
+// Modified by Timothy Luk
+
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;

@@ -3,6 +3,8 @@ package com.sdm.mgpica;
 // Created by TanSiewLan2021
 // Create a GamePage is an activity class used to hold the GameView which will have a surfaceview
 
+// Edited by Tan Sze Ting
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.content.Intent;

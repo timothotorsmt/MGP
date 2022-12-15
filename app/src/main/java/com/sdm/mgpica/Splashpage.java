@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 // Created by TanSiewLan2021
+// Edited by Timothy Luk
 
 public class Splashpage extends Activity
 {

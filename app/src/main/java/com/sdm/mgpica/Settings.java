@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.content.Intent;
 import android.widget.ImageButton;
 
-// Created by TanSiewLan2021
+// Created by TanSzeTing2022
 
 public class Settings extends Activity implements OnClickListener, StateBase {  //Using StateBase class
 

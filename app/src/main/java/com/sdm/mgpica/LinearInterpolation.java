@@ -1,5 +1,7 @@
 package com.sdm.mgpica;
 
+// Written by Timothy
+
 public interface LinearInterpolation {
     static float Flip(float x)
     {

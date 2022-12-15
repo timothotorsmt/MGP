@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 
 // Created by TanSiewLan2021
+// Edited by Tan Sze Ting
 
 public class EntityManager {
 
