@@ -5,6 +5,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 
 public class EnemyEntity implements EntityBase, Collidable {
     // Comment for now and use if code from Slide no 7 is type in
@@ -28,6 +31,8 @@ public class EnemyEntity implements EntityBase, Collidable {
 
     private int iHealth = 100;
     public int width = 150;
+
+    private Vibrator _vibrator;
 
     public boolean IsDone() {
         return isDone;
@@ -57,6 +62,8 @@ public class EnemyEntity implements EntityBase, Collidable {
         spritesheet = new Sprite(sbmp,
                 1,1, 16);
         isInit = true;
+
+        _vibrator = (Vibrator)_view.getContext().getSystemService (_view.getContext().VIBRATOR_SERVICE);
     }
 
     public void Update(float _dt) {
@@ -99,6 +106,7 @@ public class EnemyEntity implements EntityBase, Collidable {
                 xPos = -100;
                 PlayerEntity.Create().isMidair = false;
                 SetIsDone(true);
+                startVibrate();
             } else {
                 if (PlayerEntity.Create().isDamagable) {
                     PlayerEntity.Create().iHealth -= 25;
@@ -170,6 +178,18 @@ public class EnemyEntity implements EntityBase, Collidable {
 
     @Override
     public void OnHit(Collidable _other) {
+    }
 
+    public void startVibrate(){
+        if (Build.VERSION.SDK_INT >= 26)
+            _vibrator.vibrate(VibrationEffect.createOneShot(10, 10));
+        else{
+            long pattern[] = {0, 1, 0};
+            _vibrator.vibrate(pattern, -1);
+        }
+    }
+
+    public void stopVibrate(){
+        _vibrator.cancel();
     }
 }
