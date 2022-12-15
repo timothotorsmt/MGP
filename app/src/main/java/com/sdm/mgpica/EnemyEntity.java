@@ -98,6 +98,7 @@ public class EnemyEntity implements EntityBase, Collidable {
 
                 xPos = -100;
                 PlayerEntity.Create().isMidair = false;
+                PlayerEntity.Create().iEnemyKillScore += 300;
                 SetIsDone(true);
             } else {
                 if (PlayerEntity.Create().isDamagable) {
