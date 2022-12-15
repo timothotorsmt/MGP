@@ -16,6 +16,10 @@ public class PlayerEntity implements EntityBase, Collidable {
     private Bitmap sbmp = null;
     private Sprite spritesheet = null; // using Sprite class
 
+    private Bitmap bmp_jump = null;
+    private Bitmap sbmp_jump = null;
+    private Sprite spritesheet_jump = null; // using Sprite class
+
     private boolean isDone = false;
     private int xPos = 0, yPos = 0;
     public int yPosOnScreen = 600;
@@ -63,12 +67,16 @@ public class PlayerEntity implements EntityBase, Collidable {
                 R.drawable.tile_0300);
         sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
                 (int)width,true);
-        //spritesheet = new Sprite(bmp, 4,4, 16);
-
-        //spritesheet = new Sprite(BitmapFactory.decodeResource(_view.getResources(),
-        //                R.drawable.smurf_sprite), 4,4, 16);
 
         spritesheet = new Sprite(sbmp,
+                1,1, 16);
+
+        bmp_jump = BitmapFactory.decodeResource(_view.getResources(),
+                R.drawable.player_jump);
+        sbmp_jump = Bitmap.createScaledBitmap(bmp_jump, (int)width,
+                (int)width,true);
+
+        spritesheet_jump = new Sprite(sbmp_jump,
                 1,1, 16);
 
         iHealth = 100;
@@ -144,7 +152,10 @@ public class PlayerEntity implements EntityBase, Collidable {
     }
 
     public void Render(Canvas _canvas) {
-        spritesheet.Render(_canvas, xPos, yPosOnScreen + 50);
+        if (isJumping || isStalling)
+            spritesheet_jump.Render(_canvas, xPos, yPosOnScreen + 50);
+        else
+            spritesheet.Render(_canvas, xPos, yPosOnScreen + 50);
     }
 
     public boolean IsInit(){
