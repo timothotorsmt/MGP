@@ -46,7 +46,7 @@ public class EnemyEntity implements EntityBase, Collidable {
         xPos = x;
         yPos = ScreenHeight + 50;
         bmp = BitmapFactory.decodeResource(_view.getResources(),
-                R.drawable.tile_0300);
+                R.drawable.enemy);
         sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
                 (int)width,true);
         //spritesheet = new Sprite(bmp, 4,4, 16);

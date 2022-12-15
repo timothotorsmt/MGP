@@ -42,7 +42,7 @@ public class ProjectileEntity implements EntityBase, Collidable {
         yPos = (int) PlayerEntity.Create().GetPosY();
 
         bmp = BitmapFactory.decodeResource(_view.getResources(),
-                R.drawable.tile_0300);
+                R.drawable.projectile);
         sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
                 (int)width,true);
         //spritesheet = new Sprite(bmp, 4,4, 16);

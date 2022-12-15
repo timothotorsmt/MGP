@@ -19,13 +19,15 @@ public class ActionButtonEntity implements EntityBase {
     public LinkedList<ProjectileEntity> projectileEntities = new LinkedList<>();
 
     private boolean isDone = false;
-    private float timeBetweenShots = 500f;
+    private float timeBetweenShots = 0.5f;
     private float timer = 0;
     private int xPos, yPos;
     private boolean Paused = false;
     private boolean Toggle = true;
 
     private boolean isInit = false;
+
+    static ActionButtonEntity Instance = null;
 
     public boolean IsDone() {
         return isDone;
@@ -67,6 +69,8 @@ public class ActionButtonEntity implements EntityBase {
             }
         }
 
+
+        if (Toggle) {
         if (TouchManager.Instance.HasTouch()) {
             if (TouchManager.Instance.HasTouch() && !Paused) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
@@ -77,17 +81,16 @@ public class ActionButtonEntity implements EntityBase {
                     if (!PlayerEntity.Create().isMidair) {
                         PlayerEntity.Create().SetToJump();
                     } else {
-                        if (Toggle) {
-                            Toggle = false;
+                        Toggle = false;
 
-                            // Jump/Shoot
-                            ProjectileEntity pe = ProjectileEntity.Create();
-                            projectileEntities.add(pe);
-                            PlayerEntity.Create().SetStall();
-                        }
+                        // Jump/Shoot
+                        ProjectileEntity pe = ProjectileEntity.Create();
+                        projectileEntities.add(pe);
+                        PlayerEntity.Create().SetStall();
                     }
                 }
             }
+        }
         }
         else
             Paused = false;
@@ -116,8 +119,10 @@ public class ActionButtonEntity implements EntityBase {
     }
 
     public static ActionButtonEntity Create(){
-        ActionButtonEntity result = new ActionButtonEntity();
-        EntityManager.Instance.AddEntity(result, ENTITY_TYPE.ENT_ACTION_BUTTON);
-        return result;
+        if (Instance == null) {
+            Instance = new ActionButtonEntity();
+            EntityManager.Instance.AddEntity(Instance, ENTITY_TYPE.ENT_ACTION_BUTTON);
+        }
+        return Instance;
     }
 }

@@ -60,7 +60,7 @@ public class RenderTextEntity implements EntityBase {
 
     public void Render(Canvas _canvas) {
         Paint paint = new Paint();
-        paint.setARGB(0, 0,0,0); // number range from 0-255
+        paint.setARGB(255, 255,255,255); // number range from 0-255
         paint.setStrokeWidth(200);
         paint.setTextSize(100);
         paint.setTypeface(myfont);
