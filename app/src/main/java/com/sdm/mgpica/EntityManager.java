@@ -44,51 +44,8 @@ public class EntityManager {
                 // Done! Time to add to the removal list
                 removalList.add(entityList.get(i));
             }
+            removalList.clear(); // Clean up of removal list
         }
-
-        // Remove all entities that are done
-        for (EntityBase currEntity : removalList) {
-            entityList.remove(currEntity);
-        }
-        removalList.clear(); // Clean up of removal list
-
-        // Collision Check
-        for (int i = 0; i < entityList.size(); ++i)
-        {
-            EntityBase currEntity = entityList.get(i);
-
-            if (currEntity instanceof Collidable)
-            {
-                Collidable first = (Collidable) currEntity;
-
-                for (int j = i+1; j < entityList.size(); ++j)
-                {
-                    EntityBase otherEntity = entityList.get(j);
-
-                    if (otherEntity instanceof Collidable)
-                    {
-                        Collidable second = (Collidable) otherEntity;
-
-                        if (Collision.SphereToSphere(first.GetPosX(), first.GetPosY(), first.GetRadius(), second.GetPosX(), second.GetPosY(), second.GetRadius()))
-                        {
-                            first.OnHit(second);
-                            second.OnHit(first);
-                        }
-                    }
-                }
-            }
-
-            // Check if need to clean up
-            if (currEntity.IsDone()) {
-                removalList.add(currEntity);
-            }
-        }
-
-        // Remove all entities that are done
-        for (EntityBase currEntity : removalList) {
-            entityList.remove(currEntity);
-        }
-        removalList.clear();
     }
 
     public void Render(Canvas _canvas)

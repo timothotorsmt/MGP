@@ -10,16 +10,17 @@ public class BlockEntity implements EntityBase, Collidable {
 
     private Bitmap bmp = null;
     private Bitmap scaledbmp1 = null, scaledbmp2 = null, scaledbmp3 = null;
+    private int ScreenWidth, ScreenHeight;
 
     private boolean isDone = false;
-    private int xPos = 0, yPos = 0;
+    private int xPos = 0; private float yPos = 0;
     private int xOffset = 0;
     private int blockScale = 1;
+    private float tempPosition;
 
     private boolean isInit = false;
     private boolean hasTouched = false;
 
-    private int ScreenWidth, ScreenHeight;
 
     public boolean IsDone() {
         return isDone;
@@ -33,6 +34,7 @@ public class BlockEntity implements EntityBase, Collidable {
     public void Init(SurfaceView _view) {
         bmp = BitmapFactory.decodeResource(_view.getResources(),
                 R.drawable.groundstone);
+
         // get the screen size
         DisplayMetrics metrics = _view.getResources().getDisplayMetrics();
         ScreenWidth = metrics.widthPixels;
@@ -49,7 +51,41 @@ public class BlockEntity implements EntityBase, Collidable {
         if (GameSystem.Instance.GetIsPaused())
             return;
 
-        yPos -= _dt * 80;
+        if (PlayerEntity.Create().isJumping) {
+            tempPosition = yPos + _dt * PlayerEntity.Create().speed * 2;
+            yPos = LinearInterpolation.Lerp(yPos, tempPosition, 0.5f);
+        }
+        else if (PlayerEntity.Create().isMoving == true) {
+            tempPosition = yPos - _dt * PlayerEntity.Create().speed;
+            yPos = LinearInterpolation.Lerp(yPos, tempPosition, 0.5f);
+        }
+
+        if ((ScreenHeight + yPos) < 100) {
+            SetIsDone(true);
+        }
+    }
+
+    public boolean collision(){
+        // Collision (i think)
+        AABB playerAABB = new AABB();
+        playerAABB.minX = PlayerEntity.Create().GetPosX();
+        playerAABB.minY = PlayerEntity.Create().yPosOnScreen;
+        playerAABB.height = PlayerEntity.Create().width;
+        playerAABB.width = PlayerEntity.Create().width;
+
+        AABB platformAABB = new AABB();
+        platformAABB.minX = xOffset;
+        platformAABB.minY = ScreenHeight + yPos;
+        platformAABB.width = (ScreenWidth / (5 - (blockScale)));
+        platformAABB.height = 50;
+
+        if (Collision.AABBtoAABB(playerAABB, platformAABB)) {
+            if (platformAABB.minY - playerAABB.minY > (playerAABB.height - 20)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void Setoffset (int NewxOffset) {
@@ -61,12 +97,12 @@ public class BlockEntity implements EntityBase, Collidable {
 
     public void Render(Canvas _canvas) {
         if (blockScale == 0) {
-            _canvas.drawBitmap(scaledbmp1, xPos + xOffset, ScreenHeight - 50 + yPos, null);
+            _canvas.drawBitmap(scaledbmp1, xPos + xOffset, ScreenHeight + yPos, null);
         }
         else if (blockScale == 1) {
-            _canvas.drawBitmap(scaledbmp2, xPos + xOffset, ScreenHeight - 50 + yPos, null);
+            _canvas.drawBitmap(scaledbmp2, xPos + xOffset, ScreenHeight + yPos, null);
         } else {
-            _canvas.drawBitmap(scaledbmp3, xPos + xOffset, ScreenHeight - 50 + yPos, null);
+            _canvas.drawBitmap(scaledbmp3, xPos + xOffset, ScreenHeight + yPos, null);
         }
     }
 

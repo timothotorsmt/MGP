@@ -21,11 +21,22 @@ public class Collision {
     }
 
     // TODO: Actually try to see if it works
-    public static boolean AABBtoAABB (float minx1, float miny1, float maxx1, float maxy1, float minx2, float miny2, float maxx2, float maxy2)
+    public static boolean AABBtoAABB (AABB a, AABB b)
     {
-        if (maxx1 < minx2 || minx1 > maxx2) return false;
-        if (maxy1 < miny2 || miny1 > maxy2) return false;
-
-        return true;
+        if(a.minX < b.minX + b.width &&
+                a.minX + a.width > b.minX &&
+                a.minY < b.minY + b.height &&
+                a.minY + a.height > b.minY)
+        {
+            return true;
+        }
+        return false;
     }
+}
+
+class AABB {
+    public float minX = 5;
+    public float minY = 5;
+    public float width = 50;
+    public float height = 50;
 }

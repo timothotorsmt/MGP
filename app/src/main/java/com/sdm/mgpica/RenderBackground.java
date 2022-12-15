@@ -8,7 +8,6 @@ import android.view.SurfaceView;
 
 import java.util.LinkedList;
 
-
 public class RenderBackground implements EntityBase {
     boolean isDone = false;
     private Bitmap bmp = null;
@@ -58,18 +57,12 @@ public class RenderBackground implements EntityBase {
     public void Update(float _dt) {
         if (GameSystem.Instance.GetIsPaused())
             return;
-        /*
-        if (TouchManager.Instance.IsDown())
-            playerY -= _dt * 150;
-        else {
-            if (playerY < 0) {
-                playerY += _dt * 75;
-                if (playerY > 0)
-                    playerY = 0;
-            }
+
+        if (Math.abs(-PlayerEntity.Create().GetPosY() - playerY) > 0.1) {
+            playerY = LinearInterpolation.Lerp(playerY, -PlayerEntity.Create().GetPosY(), 0.2f);
+        } else {
+            playerY = -PlayerEntity.Create().GetPosY();
         }
-        */
-        playerY = -PlayerEntity.Create().GetPosY();
         //if (!TouchManager.Instance.IsDown()) {
             yPos = (playerY%ScreenHeight);
             //yPos -= _dt * 100; // 500 is just a variable number; can be edited
@@ -93,29 +86,40 @@ public class RenderBackground implements EntityBase {
             //}
         //}
 
-        timer += _dt;
-        if (timer > nextTimerInterval) {
-            nextTimerInterval = (float)Math.random() * (3.0f) + 2.0f;
-            int scale = (int)(Math.random() * (3));
-            timer = 0;
-            int b = (int)(Math.random() * (ScreenWidth / 4 * 3));
+        if (PlayerEntity.Create().isMoving && !PlayerEntity.Create().isJumping) {
+            timer += _dt;
+            if (timer > nextTimerInterval) {
+                nextTimerInterval = (float)Math.random() * (3.0f) + 1.0f;
+                int scale = (int)(Math.random() * (3));
+                timer = 0;
+                int b = (int)(Math.random() * (ScreenWidth / 4 * 3));
 
-            System.out.print(b);
-            BlockEntity be = BlockEntity.Create();
-            be.SetScale(scale);
-            be.Setoffset(b);
+                System.out.print(b);
+                BlockEntity be = BlockEntity.Create();
+                be.SetScale(scale);
+                be.Setoffset(b);
 
-            platforms.add(be);
-        }
-
-        for (BlockEntity be: platforms) {
-            be.Update(_dt);
-            if (be.GetPosY() > -50) {
-                // delete the platform because it's offscreen
-                platforms.remove(be);
+                platforms.add(be);
             }
         }
+
+        boolean isCollision = PlatformCollisions();
+
+        PlayerEntity.Create().isMidair = isCollision;
+        PlayerEntity.Create().isMoving  = isCollision;
     }
+
+    public boolean PlatformCollisions() {
+        boolean playerMove = true;
+        for (BlockEntity be: platforms) {
+            if (be.collision() == false) {
+                playerMove = false;
+            }
+        }
+
+        return playerMove;
+    }
+
     public void Render(Canvas _canvas) {
         _canvas.drawBitmap(scaledbmp, xPos, yPos, null);
         _canvas.drawBitmap(scaledbmp, xPos, (yPos + ScreenHeight), null);
@@ -128,11 +132,6 @@ public class RenderBackground implements EntityBase {
 
         _canvas.drawBitmap(scaledbmp3, xPos, yPos3, null);
         _canvas.drawBitmap(scaledbmp3, xPos, (yPos3 + ScreenHeight), null);
-
-        for (BlockEntity be: platforms) {
-            be.Render(_canvas);
-            System.out.print("Rendered");
-        }
     }
 
     public boolean IsInit() {

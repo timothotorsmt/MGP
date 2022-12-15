@@ -5,6 +5,7 @@ package com.sdm.mgpica;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,6 +37,14 @@ public class GamePage extends Activity {
         TouchManager.Instance.Update(x, y, event.getAction());
 
         return true;
+    }
+
+    public void toLossScreen(){
+        finish();
+        Intent intent = new Intent();
+        intent.setClass(this, Losescreen.class);
+        StateManager.Instance.ChangeState("Losescreen"); // Default is like a loading page
+        startActivity(intent);
     }
 
 }

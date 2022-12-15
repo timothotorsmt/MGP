@@ -51,7 +51,7 @@ public class LeftButtonEntity implements EntityBase {
         buttonDelay += _dt;
 
         if (TouchManager.Instance.HasTouch()){
-            if (TouchManager.Instance.IsDown() && !Paused) {
+            if (!Paused) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
 
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
