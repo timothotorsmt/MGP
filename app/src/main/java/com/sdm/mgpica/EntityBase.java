@@ -20,8 +20,11 @@ public interface EntityBase
          ENT_L_BUTTON,
          ENT_R_BUTTON,
          ENT_ACTION_BUTTON,
+         ENT_PROJECTILE,
+         ENT_ENEMY,
          ENT_PAUSE,
-         ENT_TEXT
+         ENT_TEXT,
+         ENT_BLOCKS
     }
 
     boolean IsDone();

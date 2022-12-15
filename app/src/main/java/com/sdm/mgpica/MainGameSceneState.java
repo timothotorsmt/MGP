@@ -2,6 +2,7 @@ package com.sdm.mgpica;
 
 import android.app.Activity;
 import android.graphics.Canvas;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceView;
@@ -22,12 +23,13 @@ public class MainGameSceneState implements StateBase {
         RenderBackground.Create();
         RenderTextEntity.Create();
         //SmurfEntity.Create();
-        //StarEntity.Create(); // Week 8
         PlayerEntity.Create();
         PauseButtonEntity.Create(); // Week 8
         LeftButtonEntity.Create();
         RightButtonEntity.Create();
         ActionButtonEntity.Create();
+        //EnemyEntity.Create();
+        EnemyManager.Create();
         // Example to include another Renderview for Pause Button
     }
 
@@ -47,6 +49,11 @@ public class MainGameSceneState implements StateBase {
     public void Update(float _dt) {
 
         EntityManager.Instance.Update(_dt);
+
+        if (PlayerEntity.Create().GetHealth() <= 0)
+        {
+            GamePage.Instance.toLossScreen();
+        }
 
         if (TouchManager.Instance.IsDown()) {
 			

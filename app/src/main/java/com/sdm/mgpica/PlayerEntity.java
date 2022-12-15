@@ -8,6 +8,7 @@ import android.view.SurfaceView;
 
 public class PlayerEntity implements EntityBase, Collidable {
     private static PlayerEntity Instance = null;
+
     // Comment for now and use if code from Slide no 7 is type in
     int ScreenWidth, ScreenHeight;
 
@@ -17,17 +18,25 @@ public class PlayerEntity implements EntityBase, Collidable {
 
     private boolean isDone = false;
     private int xPos = 0, yPos = 0;
+    public int yPosOnScreen = 600;
+    public int idealyPosOnScreen = 600;
 
     private boolean isInit = false;
     private boolean hasTouched = false;
 
-    private boolean isMidair = true;
-    private boolean isJumping = false;
+    public float speed = 0;
+
+    public boolean isMidair = true;
+    public boolean isStalling = true;
+    public boolean isJumping = false;
+    public boolean isDamagable = true;
 
     // Temporary Jump Timer
     private float JumpTimer = 0;
+    public boolean isMoving = true;
 
-    private int iHealth = 100;
+    public int iHealth = 0;
+    public int width = 150;
 
     public boolean IsDone() {
         return isDone;
@@ -43,11 +52,11 @@ public class PlayerEntity implements EntityBase, Collidable {
         ScreenHeight = metrics.heightPixels;
 
         Instance.xPos = ScreenWidth/2;
-        Instance.yPos = 400;
+        Instance.yPos = yPosOnScreen;
         bmp = BitmapFactory.decodeResource(_view.getResources(),
                 R.drawable.tile_0300);
-        sbmp = Bitmap.createScaledBitmap(bmp, (int)150,
-                (int)150,true);
+        sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
+                (int)width,true);
         //spritesheet = new Sprite(bmp, 4,4, 16);
 
         //spritesheet = new Sprite(BitmapFactory.decodeResource(_view.getResources(),
@@ -55,26 +64,63 @@ public class PlayerEntity implements EntityBase, Collidable {
 
         spritesheet = new Sprite(sbmp,
                 1,1, 16);
+
+        iHealth = 100;
+
         isInit = true;
     }
+
     public void Update(float _dt) {
         if (GameSystem.Instance.GetIsPaused())
             return;
 
-        Instance.yPos += _dt * 150;
         spritesheet.Update(_dt);
+
+        if (Math.abs(yPosOnScreen - idealyPosOnScreen) > 0.1) {
+            yPosOnScreen = (int)LinearInterpolation.Lerp(yPosOnScreen, idealyPosOnScreen, 0.5f);
+            //yPosOnScreen = idealyPosOnScreen;
+        }
 
         if (isJumping)
         {
             JumpTimer -= _dt;
-            Instance.yPos -= _dt * 165;
+            if (speed != 300) {
+                speed = LinearInterpolation.LerpEaseOut(speed, 300, 0.3f);
+            }
+            Instance.yPos -= _dt * speed;
 
             if (JumpTimer < 0)
             {
                 isJumping = false;
                 JumpTimer = 0;
+                speed = 0;
+            }
+        } else if (isStalling) {
+            JumpTimer -= _dt;
+            if (speed != 0) {
+                speed = LinearInterpolation.Lerp(speed, 0, 0.2f);
+            }
+
+            if (JumpTimer < 0)
+            {
+                isStalling = false;
+                JumpTimer = 0;
+                speed = 0;
+                isMoving = true;
+                isMidair = true;
             }
         }
+        else if (!isMoving) {
+            Instance.yPos -= 0;
+        }
+        else {
+            idealyPosOnScreen = 600;
+            if (speed != 250) {
+                speed = LinearInterpolation.Lerp(speed, 250, 0.5f);
+            }
+            Instance.yPos += _dt * speed;
+        }
+
         //if (TouchManager.Instance.HasTouch())
         //{
         //    float imgRadius = spritesheet.GetWidth() * 0.5f;
@@ -89,8 +135,12 @@ public class PlayerEntity implements EntityBase, Collidable {
     }
 
     public void Render(Canvas _canvas) {
-        spritesheet.Render(_canvas, xPos, 400);
+        spritesheet.Render(_canvas, xPos, yPosOnScreen + 50);
     }
+
+    public int GetHealth() { return iHealth; }
+
+    public void SetHealth(int health) {iHealth = health;}
 
     public boolean IsInit(){
 
@@ -119,8 +169,20 @@ public class PlayerEntity implements EntityBase, Collidable {
     }
 
     public void SetToJump(){
-        isJumping = true;
-        JumpTimer = 0.6f;
+        if (!isMidair) {
+            isJumping = true;
+            speed = 150;
+            JumpTimer = 0.6f;
+            isMidair = true;
+            idealyPosOnScreen = 550;
+        }
+    }
+
+    public void SetStall() {
+        isStalling = true;
+        speed = 300;
+        JumpTimer = 0.2f;
+        isMoving = false;
     }
 
     @Override

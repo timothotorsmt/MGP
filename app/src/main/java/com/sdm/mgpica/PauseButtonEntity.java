@@ -92,7 +92,7 @@ public class PauseButtonEntity implements EntityBase {
     }
 
     public int GetRenderLayer(){
-        return LayerConstants.RENDERPAUSE_LAYER;
+        return LayerConstants.UI_LAYER;
     }
 
     public EntityBase.ENTITY_TYPE GetEntityType(){

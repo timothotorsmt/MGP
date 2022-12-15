@@ -19,4 +19,24 @@ public class Collision {
 
         return true;
     }
+
+    // TODO: Actually try to see if it works
+    public static boolean AABBtoAABB (AABB a, AABB b)
+    {
+        if(a.minX < b.minX + b.width &&
+                a.minX + a.width > b.minX &&
+                a.minY < b.minY + b.height &&
+                a.minY + a.height > b.minY)
+        {
+            return true;
+        }
+        return false;
+    }
+}
+
+class AABB {
+    public float minX = 5;
+    public float minY = 5;
+    public float width = 50;
+    public float height = 50;
 }

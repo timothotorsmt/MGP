@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
+import java.util.LinkedList;
+
 public class ActionButtonEntity implements EntityBase {
 
     private Bitmap bmp = null;
@@ -14,10 +16,14 @@ public class ActionButtonEntity implements EntityBase {
     int ScreenWidth, ScreenHeight;
 
     private float buttonDelay = 0;
+    public LinkedList<ProjectileEntity> projectileEntities = new LinkedList<>();
 
     private boolean isDone = false;
+    private float timeBetweenShots = 500f;
+    private float timer = 0;
     private int xPos, yPos;
     private boolean Paused = false;
+    private boolean Toggle = true;
 
     private boolean isInit = false;
 
@@ -44,21 +50,42 @@ public class ActionButtonEntity implements EntityBase {
         xPos = ScreenWidth - 220;
         yPos = ScreenHeight - 150;
 
+        timer = 0;
+
         isInit = true;
     }
 
     public void Update(float _dt) {
         buttonDelay += _dt;
 
-        if (TouchManager.Instance.HasTouch()){
-            if (TouchManager.Instance.IsDown() && !Paused) {
+        if (!Toggle) {
+            if (timer > timeBetweenShots) {
+                timer = 0;
+                Toggle = true;
+            } else {
+                timer += _dt;
+            }
+        }
+
+        if (TouchManager.Instance.HasTouch()) {
+            if (TouchManager.Instance.HasTouch() && !Paused) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
 
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
                         TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)
                         && buttonDelay >= 0.25) {
-                    PlayerEntity.Create().SetToJump();
-                    // Jump/Shoot
+                    if (!PlayerEntity.Create().isMidair) {
+                        PlayerEntity.Create().SetToJump();
+                    } else {
+                        if (Toggle) {
+                            Toggle = false;
+
+                            // Jump/Shoot
+                            ProjectileEntity pe = ProjectileEntity.Create();
+                            projectileEntities.add(pe);
+                            PlayerEntity.Create().SetStall();
+                        }
+                    }
                 }
             }
         }
