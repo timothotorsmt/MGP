@@ -36,6 +36,8 @@ public class PlayerEntity implements EntityBase, Collidable {
     public boolean isMoving = true;
 
     public int iHealth = 0;
+    public int iEnemyKillScore = 0;
+    public int iTotalScore = 0;
     public int width = 150;
 
     public boolean IsDone() {
@@ -51,10 +53,10 @@ public class PlayerEntity implements EntityBase, Collidable {
         ScreenWidth = metrics.widthPixels;
         ScreenHeight = metrics.heightPixels;
 
-        Instance.xPos = ScreenWidth/2;
-        Instance.yPos = yPosOnScreen;
+        xPos = ScreenWidth/2;
+        yPos = yPosOnScreen;
         bmp = BitmapFactory.decodeResource(_view.getResources(),
-                R.drawable.tile_0300);
+                R.drawable.player);
         sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
                 (int)width,true);
         //spritesheet = new Sprite(bmp, 4,4, 16);
@@ -73,6 +75,8 @@ public class PlayerEntity implements EntityBase, Collidable {
     public void Update(float _dt) {
         if (GameSystem.Instance.GetIsPaused())
             return;
+
+
 
         spritesheet.Update(_dt);
 
@@ -121,6 +125,7 @@ public class PlayerEntity implements EntityBase, Collidable {
             Instance.yPos += _dt * speed;
         }
 
+        iTotalScore = (yPos/10) + iEnemyKillScore;
         //if (TouchManager.Instance.HasTouch())
         //{
         //    float imgRadius = spritesheet.GetWidth() * 0.5f;
@@ -137,10 +142,6 @@ public class PlayerEntity implements EntityBase, Collidable {
     public void Render(Canvas _canvas) {
         spritesheet.Render(_canvas, xPos, yPosOnScreen + 50);
     }
-
-    public int GetHealth() { return iHealth; }
-
-    public void SetHealth(int health) {iHealth = health;}
 
     public boolean IsInit(){
 
@@ -185,6 +186,11 @@ public class PlayerEntity implements EntityBase, Collidable {
         isMoving = false;
     }
 
+    public void Reset()
+    {
+        isInit = false;
+    }
+
     @Override
     public String GetType() {
         return null;
@@ -212,6 +218,10 @@ public class PlayerEntity implements EntityBase, Collidable {
     @Override
     public void OnHit(Collidable _other) {
 
+    }
+
+    public void Destroy(){
+        Instance = null;
     }
 }
 

@@ -64,7 +64,8 @@ public class RenderTextEntity implements EntityBase {
         paint.setStrokeWidth(200);
         paint.setTextSize(100);
         paint.setTypeface(myfont);
-        _canvas.drawText("Fuck this module", 30, 80 , paint);
+        _canvas.drawText("Health: " + PlayerEntity.Create().iHealth, 30, 80 , paint);
+        _canvas.drawText("Score: " + PlayerEntity.Create().iTotalScore, 30, 169 , paint);
     }
 
     public boolean IsInit(){

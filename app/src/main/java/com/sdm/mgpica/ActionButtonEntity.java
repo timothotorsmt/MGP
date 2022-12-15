@@ -120,4 +120,8 @@ public class ActionButtonEntity implements EntityBase {
         EntityManager.Instance.AddEntity(result, ENTITY_TYPE.ENT_ACTION_BUTTON);
         return result;
     }
+
+    public void Destroy(){
+        Instance = null;
+    }
 }
