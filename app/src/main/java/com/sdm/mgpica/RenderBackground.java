@@ -8,6 +8,9 @@ import android.view.SurfaceView;
 
 import java.util.LinkedList;
 
+// Written by Timothy and Sze Ting
+// Written by Timothy (platform generation)
+
 public class RenderBackground implements EntityBase {
     boolean isDone = false;
     private Bitmap bmp = null;

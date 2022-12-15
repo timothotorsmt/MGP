@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
+// Written by Tan Sze Ting
+
 public class LeftButtonEntity implements EntityBase {
 
     private Bitmap bmp = null;

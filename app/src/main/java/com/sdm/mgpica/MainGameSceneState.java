@@ -9,6 +9,8 @@ import android.graphics.Paint;
 import android.view.SurfaceView;
 
 // Created by TanSiewLan2021
+// Edited by Timothy Luk
+// Edited by Tan Sze Ting
 
 public class MainGameSceneState implements StateBase {
     private float timer = 0.0f;

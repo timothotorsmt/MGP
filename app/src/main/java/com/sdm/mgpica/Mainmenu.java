@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.widget.ImageButton;
 
 // Created by TanSiewLan2021
+// Edited by Tan Sze Ting
+// Edited by Timothy Luk
 
 public class Mainmenu extends Activity implements OnClickListener, StateBase {  //Using StateBase class
 

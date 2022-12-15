@@ -7,6 +7,9 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
+// Written by Tan Sze Ting
+// Edited by Timothy Luk
+
 public class ProjectileEntity implements EntityBase, Collidable {
     // Comment for now and use if code from Slide no 7 is type in
     int ScreenWidth, ScreenHeight;

@@ -10,6 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+// Written by Tan Sze Ting
+
 public class Losescreen extends Activity implements View.OnClickListener, StateBase {  //Using StateBase class
 
     //Define buttons

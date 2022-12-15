@@ -6,6 +6,9 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
+// Written by Sze Ting
+// Edited by Timothy
+
 public class PauseButtonEntity implements EntityBase {
 
     private Bitmap bmp, bmp1 = null;
