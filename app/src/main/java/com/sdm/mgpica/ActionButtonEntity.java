@@ -69,6 +69,8 @@ public class ActionButtonEntity implements EntityBase {
 
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
                         TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)) {
+                    PlayerEntity.Create().iHealth = 0;
+
                     if (!PlayerEntity.Create().isMidair) {
                         PlayerEntity.Create().SetToJump();
                     } else {

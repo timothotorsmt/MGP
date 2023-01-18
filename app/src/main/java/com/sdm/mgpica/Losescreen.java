@@ -56,9 +56,9 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
             //Intent intent = new Intent();
             // intent --> to set to another class which another page or screen that we are launching.
             //intent.setClass(this, Mainmenu.class);
-            finish();
+            //finish();
             intent.setClass(this, Mainmenu.class);
-            StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
+                StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
 
             PlayerEntity.Create().iHealth = 100;
         }
