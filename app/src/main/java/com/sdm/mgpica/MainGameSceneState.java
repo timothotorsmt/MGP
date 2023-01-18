@@ -34,6 +34,7 @@ public class MainGameSceneState implements StateBase {
         //EnemyEntity.Create();
         EnemyManager.Create();
         // Example to include another Renderview for Pause Button
+        AudioManager.Instance.PlayAudio(R.raw.bgm, 0.8f);
     }
 
     @Override
@@ -52,11 +53,18 @@ public class MainGameSceneState implements StateBase {
 
     @Override
     public void Update(float _dt) {
+        if (!AudioManager.Instance.IsPlaying(R.raw.bgm)) // bgm loop
+            AudioManager.Instance.PlayAudio(R.raw.bgm, 0.8f);
 
         EntityManager.Instance.Update(_dt);
 
         if (PlayerEntity.Create().iHealth <= 0)
         {
+            GameSystem.Instance.SaveEditBegin();
+            if (GameSystem.Instance.GetIntFromSave("Highscore") == 0 || GameSystem.Instance.GetIntFromSave("Highscore") < PlayerEntity.Create().iTotalScore)
+                GameSystem.Instance.SetIntInSave("Highscore", PlayerEntity.Create().iTotalScore);
+            GameSystem.Instance.SaveEditEnd();
+
             GamePage.Instance.toLossScreen();
         }
 

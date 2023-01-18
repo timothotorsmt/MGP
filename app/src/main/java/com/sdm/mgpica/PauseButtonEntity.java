@@ -20,8 +20,9 @@ public class PauseButtonEntity implements EntityBase {
 
     private boolean isDone = false;
     private int xPos, yPos;
-    private boolean Paused = false;
+    public boolean Paused = false;
 
+    static PauseButtonEntity Instance = null;
 
     private boolean isInit = false;
 
@@ -64,13 +65,21 @@ public class PauseButtonEntity implements EntityBase {
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
                         TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)
                         && buttonDelay >= 0.25) {
-                    Paused = true;
-                    GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
+                    //Paused = true;
+
+                    if (PauseConfirmDialogFragment.IsShown)
+                        return;
+
+                    PauseConfirmDialogFragment newPauseConfirm = new PauseConfirmDialogFragment();
+                    newPauseConfirm.show(GamePage.Instance.getFragmentManager(), "PauseConfirm");
+
+                    // buttonDelay = 0;
+                    // GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
                 }
             }
         }
-        else
-            Paused = false;
+        //else
+            //Paused = false;
     }
 
     public void Render(Canvas _canvas) {
@@ -101,9 +110,15 @@ public class PauseButtonEntity implements EntityBase {
         return EntityBase.ENTITY_TYPE.ENT_PAUSE;
     }
 
-    public static PauseButtonEntity Create(){
-        PauseButtonEntity result = new PauseButtonEntity();
-        EntityManager.Instance.AddEntity(result, EntityBase.ENTITY_TYPE.ENT_PAUSE);
-        return result;
+    public static PauseButtonEntity Create() {
+        if (Instance == null) {
+            Instance = new PauseButtonEntity();
+            EntityManager.Instance.AddEntity(Instance, EntityBase.ENTITY_TYPE.ENT_PAUSE);
+        }
+        return Instance;
+    }
+
+    public void Destroy(){
+        Instance = null;
     }
 }

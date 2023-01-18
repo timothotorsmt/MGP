@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 // Written by Tan Sze Ting
 
@@ -16,6 +17,7 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
     //Define buttons
     private Button btn_menu;
+    private TextView highscore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,9 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
         btn_menu = (Button)findViewById(R.id.menuButton);
         btn_menu.setOnClickListener(this); //Set Listener to this button --> Start Button
+
+        highscore = (TextView)findViewById(R.id.highscoreTxt);
+        highscore.setText("High Score: "+GameSystem.Instance.GetIntFromSave("Highscore"));
 
         StateManager.Instance.AddState(new Losescreen());
     }

@@ -64,7 +64,7 @@ public class ActionButtonEntity implements EntityBase {
         buttonDelay += _dt;
 
         if (TouchManager.Instance.HasTouch()) {
-            if (TouchManager.Instance.HasTouch() && !Paused) {
+            if (TouchManager.Instance.HasTouch() && !GameSystem.Instance.GetIsPaused()) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
 
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
