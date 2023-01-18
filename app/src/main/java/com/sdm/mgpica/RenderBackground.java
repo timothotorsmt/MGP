@@ -1,5 +1,6 @@
 package com.sdm.mgpica;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -7,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
 import java.util.LinkedList;
+import java.util.Map;
 
 // Written by Timothy and Sze Ting
 // Written by Timothy (platform generation)
@@ -23,13 +25,15 @@ public class RenderBackground implements EntityBase {
     // Singleton Instance
     private LinkedList<BlockEntity> platforms = new LinkedList<>();
     float timer = 0;
-    float nextTimerInterval = 1.0f;
+    float lastPlayerY = 0.0f;
 
     int ScreenWidth, ScreenHeight;
     private Bitmap scaledbmp = null; // will be a scaled version of the bmp based on the screenWidth and Height
     private Bitmap scaledbmp1 = null;
     private Bitmap scaledbmp2 = null;
     private Bitmap scaledbmp3 = null;
+
+    boolean HasWallInit = false;
 
     public boolean IsDone() {
         return isDone;
@@ -89,21 +93,68 @@ public class RenderBackground implements EntityBase {
             //}
         //}
 
-        if (PlayerEntity.Create().isMoving && !PlayerEntity.Create().isJumping && !PlayerEntity.Create().isStalling) {
-            timer += _dt;
-            if (timer > nextTimerInterval) {
-                nextTimerInterval = (float)Math.random() * (5.0f) + 2.0f;
-                int scale = (int)(Math.random() * (3));
-                timer = 0;
-                int b = (int)(Math.random() * (ScreenWidth / 4 * 3));
+        if (!HasWallInit) {
+            HasWallInit=  true;
+            // Generate Cave Walls at the start of the game
 
-                System.out.print(b);
-                BlockEntity be = BlockEntity.Create();
-                be.SetScale(scale);
-                be.Setoffset(b);
+            for (int i = 0; i < ScreenHeight / (ScreenWidth / 10); i++) {
+                BlockEntity beLCW = BlockEntity.Create();
+                beLCW.SetXoffset(0 - (ScreenWidth / 20));
+                beLCW.SetYoffset(-ScreenHeight + (ScreenWidth / 10) * i);
+                beLCW.SetType(1);
 
-                platforms.add(be);
+                platforms.add(beLCW);
+
+                BlockEntity beRCW = BlockEntity.Create();
+                beRCW.SetXoffset(ScreenWidth - ScreenWidth / 20);
+                beRCW.SetYoffset(-ScreenHeight + (ScreenWidth / 10) * i);
+                beRCW.SetType(1);
+
+                platforms.add(beRCW);
             }
+            lastPlayerY = 0;
+        }
+
+        if (Math.abs(-playerY - lastPlayerY) > (ScreenWidth / 3)) {
+            lastPlayerY = -playerY;
+            //nextTimerInterval = (float)Math.random() * (5.0f) + 2.0f;
+            //int scale = 1;
+            //timer = 0;
+            //int b = (int)(Math.random() * (ScreenWidth / 4 * 3));
+
+            MapSection ms = new MapSection();
+            ms.GenerateChunk();
+
+            for (int i = 0; i < 5; i++) {
+                // Generate Cave Walls
+                BlockEntity beLCW = BlockEntity.Create();
+                beLCW.SetXoffset(0 - (ScreenWidth / 20));
+                beLCW.SetYoffset(ScreenHeight + (ScreenWidth / 10) * i);
+                beLCW.SetType(1);
+
+                platforms.add(beLCW);
+
+                // Generate Cave Walls
+                BlockEntity beRCW = BlockEntity.Create();
+                beRCW.SetXoffset(ScreenWidth - ScreenWidth / 20);
+                beRCW.SetYoffset(ScreenHeight + (ScreenWidth / 10) * i);
+                beRCW.SetType(1);
+
+                platforms.add(beRCW);
+
+                for (int j = 0; j < 9; j++) {
+                    if (ms.Section[i][j] != 0) {
+                        BlockEntity be = BlockEntity.Create();
+                        be.SetXoffset((ScreenWidth / 20) + (ScreenWidth / 10) * j);
+                        be.SetYoffset(ScreenHeight + (ScreenWidth / 10) * i);
+                        be.SetType(ms.Section[i][j]);
+
+                        platforms.add(be);
+
+                    }
+                }
+            }
+
         }
 
         boolean isCollision = PlatformCollisions();

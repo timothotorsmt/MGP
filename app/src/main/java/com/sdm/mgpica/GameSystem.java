@@ -3,6 +3,8 @@ package com.sdm.mgpica;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.SurfaceView;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 // Created by TanSiewLan2021
 
@@ -11,7 +13,7 @@ public class GameSystem {
 
     // Game stuff
     private boolean isPaused = false;
-
+    
     // Singleton Pattern : Blocks others from creating
     private GameSystem()
     {

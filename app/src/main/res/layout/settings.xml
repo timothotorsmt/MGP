@@ -19,7 +19,20 @@
         android:layout_weight="1"
         android:text="back"
         android:textColor="@color/white"
+        android:fontFamily="@font/arcadia"
         android:textSize="20dp"/>
+
+    <Switch
+        android:id="@+id/control_toggle"
+        android:layout_width="245dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="116dp"
+        android:text="Use Tilt Controls"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/white"
+        android:fontFamily="@font/arcadia"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,7 @@ public class RenderTextEntity implements EntityBase {
         //myfont = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.NORMAL);
 
         // own font type
-        myfont = Typeface.createFromAsset(_view.getContext().getAssets(), "monocraft.otf");
+        myfont = _view.getResources().getFont(R.font.arcadia);
 
         isInit = true;
     }
@@ -74,7 +74,7 @@ public class RenderTextEntity implements EntityBase {
     }
 
     public boolean IsInit(){
-        return true; // Not loading any images hence not the same as Smurf entity
+        return isInit; // Not loading any images hence not the same as Smurf entity
     }
 
     public void SetRenderLayer(int _newLayer){
