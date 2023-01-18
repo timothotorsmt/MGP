@@ -19,7 +19,6 @@ public class RightButtonEntity implements EntityBase {
 
     private boolean isDone = false;
     private int xPos, yPos;
-    private boolean Paused = false;
 
     private boolean isInit = false;
 
@@ -53,7 +52,7 @@ public class RightButtonEntity implements EntityBase {
         buttonDelay += _dt;
 
         if (TouchManager.Instance.HasTouch()){
-            if (!Paused) {
+            if (!GameSystem.Instance.GetIsPaused()) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
 
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
@@ -66,8 +65,6 @@ public class RightButtonEntity implements EntityBase {
                 }
             }
         }
-        else
-            Paused = false;
     }
 
     public void Render(Canvas _canvas) {

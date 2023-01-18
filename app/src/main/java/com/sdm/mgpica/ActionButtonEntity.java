@@ -64,11 +64,13 @@ public class ActionButtonEntity implements EntityBase {
         buttonDelay += _dt;
 
         if (TouchManager.Instance.HasTouch()) {
-            if (TouchManager.Instance.HasTouch() && !Paused) {
+            if (TouchManager.Instance.HasTouch() && !GameSystem.Instance.GetIsPaused()) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
 
                 if (Collision.SphereToSphere(TouchManager.Instance.GetPosX(),
                         TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius)) {
+                    PlayerEntity.Create().iHealth = 0;
+
                     if (!PlayerEntity.Create().isMidair) {
                         PlayerEntity.Create().SetToJump();
                     } else {
