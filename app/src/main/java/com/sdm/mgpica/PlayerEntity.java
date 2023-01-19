@@ -12,6 +12,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 import android.widget.Switch;
@@ -92,6 +93,8 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
 
         sensorManager = (SensorManager)_view.getContext().getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0), SensorManager.SENSOR_DELAY_NORMAL);
+
+        ControlScheme = (GamePage.Instance.Controls == true ? 1 : 0);
         
         bmp_jump = BitmapFactory.decodeResource(_view.getResources(),
                 R.drawable.player_jump);

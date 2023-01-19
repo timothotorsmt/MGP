@@ -16,6 +16,8 @@ import android.view.WindowManager;
 public class GamePage extends Activity {
 
     public static GamePage Instance = null;
+    public boolean Controls = false;
+    public int Volume = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +35,9 @@ public class GamePage extends Activity {
 
         // The value will be default as empty string because for
         // the very first time when the app is opened, there is nothing to show
-        Boolean b = sh.getBoolean("controls", true);
+        Controls = sh.getBoolean("controls", false);
+        Volume = sh.getInt("volume", 100);
 
-        // We can then use the data
-        PlayerEntity.Create().ControlScheme = (b == true ? 1 : 0);
 
         setContentView(new GameView(this)); // Surfaceview = GameView
     }

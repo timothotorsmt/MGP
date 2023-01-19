@@ -8,19 +8,20 @@
 
     <Button
         android:id="@+id/btn_back"
-        android:background="@drawable/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.303"
         android:layout_weight="1"
+        android:background="@drawable/button"
+        android:fontFamily="@font/arcadia"
         android:text="back"
         android:textColor="@color/white"
-        android:fontFamily="@font/arcadia"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404" />
 
     <Switch
         android:id="@+id/control_toggle"
@@ -32,6 +33,31 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@color/white"
         android:fontFamily="@font/arcadia"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/VolumeBar"
+        android:layout_width="148dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="168dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.684"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/plainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="176dp"
+        android:fontFamily="@font/arcadia"
+        android:text="Volume"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/VolumeBar"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 

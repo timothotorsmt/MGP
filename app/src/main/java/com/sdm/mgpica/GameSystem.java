@@ -10,7 +10,7 @@ import android.widget.Switch;
 
 public class GameSystem {
     public final static GameSystem Instance = new GameSystem();
-    public final static String SHARED_PREF_ID = "GameSaveFile";
+    public final static String SHARED_PREF_ID = "com.sdm.mgpica.sharedpreferences";
 
     // Game stuff
     private boolean isPaused = false;

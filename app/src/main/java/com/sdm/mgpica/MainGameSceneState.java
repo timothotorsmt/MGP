@@ -34,7 +34,7 @@ public class MainGameSceneState implements StateBase {
         //EnemyEntity.Create();
         EnemyManager.Create();
         // Example to include another Renderview for Pause Button
-        AudioManager.Instance.PlayAudio(R.raw.bgm, 0.8f);
+        AudioManager.Instance.PlayAudio(R.raw.bgm, GamePage.Instance.Volume);
     }
 
     @Override
