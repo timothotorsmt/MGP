@@ -65,7 +65,7 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
     private Sensor accelerometer;
     private float[] values = {0, 0, 0};
 
-    public int iHealth = 0;
+    public int iHealth = 100;
     public int width = 150;
 
     public boolean IsDone() {

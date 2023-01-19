@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 
 public class MainGameSceneState implements StateBase {
     private float timer = 0.0f;
+    boolean GameOver = false;
 
     @Override
     public String GetName() {
@@ -23,25 +24,34 @@ public class MainGameSceneState implements StateBase {
     @Override
     public void OnEnter(SurfaceView _view)
     {
+        GameOver = false;
+
         RenderBackground.Create();
-        RenderTextEntity.Create();
-        //SmurfEntity.Create();
         PlayerEntity.Create();
         PauseButtonEntity.Create(); // Week 8
+        ActionButtonEntity.Create();
+        RenderTextEntity.Create();
+        //SmurfEntity.Create();
         LeftButtonEntity.Create();
         RightButtonEntity.Create();
-        ActionButtonEntity.Create();
         //EnemyEntity.Create();
         EnemyManager.Create();
         // Example to include another Renderview for Pause Button
-        AudioManager.Instance.PlayAudio(R.raw.bgm, GamePage.Instance.Volume);
+        if (!AudioManager.Instance.IsPlaying(R.raw.bgm)) // bgm loop
+             AudioManager.Instance.PlayAudio(R.raw.bgm, GamePage.Instance.Volume);
     }
 
     @Override
     public void OnExit() {
+        AudioManager.Instance.Release();
+
         EntityManager.Instance.Clean();
+
+        // Destroy singleton instances
         PlayerEntity.Create().Destroy();
         ActionButtonEntity.Create().Destroy();
+        PauseButtonEntity.Create().Destroy();
+
         GamePage.Instance.finish();
     }
 
@@ -53,26 +63,29 @@ public class MainGameSceneState implements StateBase {
 
     @Override
     public void Update(float _dt) {
-        if (!AudioManager.Instance.IsPlaying(R.raw.bgm)) // bgm loop
-            AudioManager.Instance.PlayAudio(R.raw.bgm, 0.8f);
+        if (!GameOver) {
+            if (PlayerEntity.Create().iHealth <= 0) {
+                GameSystem.Instance.SaveEditBegin();
+                if (GameSystem.Instance.GetIntFromSave("Highscore") == 0 || GameSystem.Instance.GetIntFromSave("Highscore") < PlayerEntity.Create().iTotalScore)
+                    GameSystem.Instance.SetIntInSave("Highscore", PlayerEntity.Create().iTotalScore);
+                GameSystem.Instance.SaveEditEnd();
 
-        EntityManager.Instance.Update(_dt);
+                GamePage.Instance.toLossScreen();
 
-        if (PlayerEntity.Create().iHealth <= 0)
-        {
-            GameSystem.Instance.SaveEditBegin();
-            if (GameSystem.Instance.GetIntFromSave("Highscore") == 0 || GameSystem.Instance.GetIntFromSave("Highscore") < PlayerEntity.Create().iTotalScore)
-                GameSystem.Instance.SetIntInSave("Highscore", PlayerEntity.Create().iTotalScore);
-            GameSystem.Instance.SaveEditEnd();
+                GameOver = true;
+            }
 
-            GamePage.Instance.toLossScreen();
+            if (!AudioManager.Instance.IsPlaying(R.raw.bgm)) // bgm loop
+                AudioManager.Instance.PlayAudio(R.raw.bgm, 0.8f);
+
+            EntityManager.Instance.Update(_dt);
         }
 
-        if (TouchManager.Instance.IsDown()) {
+        //if (TouchManager.Instance.IsDown()) {
 			
             //Example of touch on screen in the main game to trigger back to Main menu
             //StateManager.Instance.ChangeState("Mainmenu");
-        }
+        //}
     }
 }
 
