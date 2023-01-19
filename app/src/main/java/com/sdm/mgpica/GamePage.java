@@ -6,6 +6,7 @@ package com.sdm.mgpica;
 // Edited by Tan Sze Ting
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.MotionEvent;
@@ -25,6 +26,17 @@ public class GamePage extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  // Hide topbar
 
         Instance = this;
+
+        // Retrieving the value using its keys the file name
+        // must be same in both saving and retrieving the data
+        SharedPreferences sh = getSharedPreferences("com.sdm.mgpica.sharedpreferences", MODE_PRIVATE);
+
+        // The value will be default as empty string because for
+        // the very first time when the app is opened, there is nothing to show
+        Boolean b = sh.getBoolean("controls", true);
+
+        // We can then use the data
+        PlayerEntity.Create().ControlScheme = (b == true ? 1 : 0);
 
         setContentView(new GameView(this)); // Surfaceview = GameView
     }

@@ -4,6 +4,7 @@ package com.sdm.mgpica;
 // Edited by Timothy
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;

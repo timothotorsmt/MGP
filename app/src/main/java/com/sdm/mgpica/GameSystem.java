@@ -13,7 +13,7 @@ public class GameSystem {
 
     // Game stuff
     private boolean isPaused = false;
-    
+
     // Singleton Pattern : Blocks others from creating
     private GameSystem()
     {
