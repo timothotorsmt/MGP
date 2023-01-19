@@ -32,6 +32,7 @@ public class AudioManager {
             audioMap.get(_id).setVolume(_volume, _volume);
             audioMap.get(_id).start();
         }
+
         // Load the audio
         MediaPlayer newAudio = MediaPlayer.create(view.getContext(), _id);
         audioMap.put(_id, newAudio);

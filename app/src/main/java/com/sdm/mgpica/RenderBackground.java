@@ -129,7 +129,7 @@ public class RenderBackground implements EntityBase {
                 // Generate Cave Walls
                 BlockEntity beLCW = BlockEntity.Create();
                 beLCW.SetXoffset(0 - (ScreenWidth / 20));
-                beLCW.SetYoffset(ScreenHeight + (ScreenWidth / 10) * i);
+                beLCW.SetYoffset((ScreenWidth / 10) * i);
                 beLCW.SetType(1);
 
                 platforms.add(beLCW);
@@ -137,7 +137,7 @@ public class RenderBackground implements EntityBase {
                 // Generate Cave Walls
                 BlockEntity beRCW = BlockEntity.Create();
                 beRCW.SetXoffset(ScreenWidth - ScreenWidth / 20);
-                beRCW.SetYoffset(ScreenHeight + (ScreenWidth / 10) * i);
+                beRCW.SetYoffset((ScreenWidth / 10) * i);
                 beRCW.SetType(1);
 
                 platforms.add(beRCW);
@@ -146,7 +146,7 @@ public class RenderBackground implements EntityBase {
                     if (ms.Section[i][j] != 0) {
                         BlockEntity be = BlockEntity.Create();
                         be.SetXoffset((ScreenWidth / 20) + (ScreenWidth / 10) * j);
-                        be.SetYoffset(ScreenHeight + (ScreenWidth / 10) * i);
+                        be.SetYoffset((ScreenWidth / 10) * i);
                         be.SetType(ms.Section[i][j]);
 
                         platforms.add(be);

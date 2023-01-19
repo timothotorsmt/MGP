@@ -34,12 +34,13 @@ public class MainGameSceneState implements StateBase {
         //EnemyEntity.Create();
         EnemyManager.Create();
         // Example to include another Renderview for Pause Button
-        AudioManager.Instance.PlayAudio(R.raw.bgm, GamePage.Instance.Volume);
+        AudioManager.Instance.PlayAudio(R.raw.bgm, GamePage.Instance.Volume / 100);
     }
 
     @Override
     public void OnExit() {
         EntityManager.Instance.Clean();
+        AudioManager.Instance.Release();
         PlayerEntity.Create().Destroy();
         ActionButtonEntity.Create().Destroy();
         GamePage.Instance.finish();
@@ -54,7 +55,7 @@ public class MainGameSceneState implements StateBase {
     @Override
     public void Update(float _dt) {
         if (!AudioManager.Instance.IsPlaying(R.raw.bgm)) // bgm loop
-            AudioManager.Instance.PlayAudio(R.raw.bgm, 0.8f);
+            AudioManager.Instance.PlayAudio(R.raw.bgm, GamePage.Instance.Volume / 100);
 
         EntityManager.Instance.Update(_dt);
 
