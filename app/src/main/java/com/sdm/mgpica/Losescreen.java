@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,7 +20,12 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
     //Define buttons
     private Button btn_menu;
-    private TextView highscore;
+    private TextView name;
+    private TextView score;
+
+    private TextView num1;
+    private TextView num2;
+    private TextView num3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +43,20 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         btn_menu = (Button)findViewById(R.id.menuButton);
         btn_menu.setOnClickListener(this); //Set Listener to this button --> Start Button
 
-        highscore = (TextView)findViewById(R.id.highscoreTxt);
-        highscore.setText("High Score: "+GameSystem.Instance.GetIntFromSave("Highscore"));
+        score = (TextView)findViewById(R.id.scoreTxt);
+        score.setText(String.valueOf(GameSystem.Instance.GetIntFromSave("Score")));
 
-        StateManager.Instance.AddState(new Losescreen());
+        name = (TextView)findViewById(R.id.nameTxt);
+        name.setText(GameSystem.Instance.GetStringFromSave("Name"));
+
+        num1 = (TextView)findViewById(R.id.num1Score);
+        num1.setText(GameSystem.Instance.GetStringFromSave("Num1Str"));
+
+        num2 = (TextView)findViewById(R.id.num2Score);
+        num2.setText(GameSystem.Instance.GetStringFromSave("Num2Str"));
+
+        num3 = (TextView)findViewById(R.id.num3Score);
+        num3.setText(GameSystem.Instance.GetStringFromSave("Num3Str"));
     }
 
     @Override

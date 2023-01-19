@@ -65,13 +65,18 @@ public class MainGameSceneState implements StateBase {
     public void Update(float _dt) {
         if (!GameOver) {
             if (PlayerEntity.Create().iHealth <= 0) {
+                if (NameInputDialogFragment.IsShown)
+                    return;
+
+                NameInputDialogFragment newNameInput = new NameInputDialogFragment();
+                newNameInput.show(GamePage.Instance.getFragmentManager(), "NameInput");
+
                 GameSystem.Instance.SaveEditBegin();
-                if (GameSystem.Instance.GetIntFromSave("Highscore") == 0 || GameSystem.Instance.GetIntFromSave("Highscore") < PlayerEntity.Create().iTotalScore)
-                    GameSystem.Instance.SetIntInSave("Highscore", PlayerEntity.Create().iTotalScore);
+                    GameSystem.Instance.SetIntInSave("Score", PlayerEntity.Create().iTotalScore);
                 GameSystem.Instance.SaveEditEnd();
 
-                GamePage.Instance.toLossScreen();
-
+                if (GameSystem.Instance.GetIntFromSave("Highscore") == 0 || GameSystem.Instance.GetIntFromSave("Highscore") < PlayerEntity.Create().iTotalScore)
+                    GameSystem.Instance.SetIntInSave("Highscore", PlayerEntity.Create().iTotalScore);
                 GameOver = true;
             }
 
