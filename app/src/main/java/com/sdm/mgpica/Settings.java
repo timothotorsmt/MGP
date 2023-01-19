@@ -54,9 +54,13 @@ public class Settings extends Activity implements OnClickListener, StateBase {  
 
         if (v == btn_back)
         {
+            Intent intent = new Intent();
+
             finish();
+            intent.setClass(this, Mainmenu.class);
             // intent --> to set to another class which another page or screen that we are launching.
             StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
+            startActivity(intent);
         }
     }
 
