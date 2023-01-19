@@ -3,13 +3,23 @@ package com.sdm.mgpica;
 // Written by Tan Sze Ting
 // Edited by Timothy
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
+import android.widget.Switch;
+import android.view.View;
 
-public class PlayerEntity implements EntityBase, Collidable {
+import javax.xml.transform.sax.SAXSource;
+
+public class PlayerEntity implements EntityBase, Collidable, SensorEventListener {
     private static PlayerEntity Instance = null;
 
     // Comment for now and use if code from Slide no 7 is type in
@@ -35,11 +45,13 @@ public class PlayerEntity implements EntityBase, Collidable {
     private boolean hasTouched = false;
 
     public float speed = 0;
+    public int ControlScheme = 1;
 
     public boolean isMidair = true;
     public boolean isStalling = true;
     public boolean isJumping = false;
     public boolean isDamagable = true;
+
 
     // Temporary Jump Timer
     private float JumpTimer = 0;
@@ -47,6 +59,10 @@ public class PlayerEntity implements EntityBase, Collidable {
 
     public int iEnemyKillScore = 0;
     public int iTotalScore = 0;
+
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private float[] values = {0, 0, 0};
 
     public int iHealth = 0;
     public int width = 150;
@@ -74,6 +90,9 @@ public class PlayerEntity implements EntityBase, Collidable {
         spritesheet = new Sprite(sbmp,
                 1,1, 16);
 
+        sensorManager = (SensorManager)_view.getContext().getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.registerListener(this, sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0), SensorManager.SENSOR_DELAY_NORMAL);
+        
         bmp_jump = BitmapFactory.decodeResource(_view.getResources(),
                 R.drawable.player_jump);
         sbmp_jump = Bitmap.createScaledBitmap(bmp_jump, (int)width,
@@ -93,6 +112,7 @@ public class PlayerEntity implements EntityBase, Collidable {
             return;
 
         spritesheet.Update(_dt);
+
 
         if (Math.abs(yPosOnScreen - idealyPosOnScreen) > 0.1) {
             yPosOnScreen = (int)LinearInterpolation.Lerp(yPosOnScreen, idealyPosOnScreen, 0.5f);
@@ -137,6 +157,23 @@ public class PlayerEntity implements EntityBase, Collidable {
                 speed = LinearInterpolation.Lerp(speed, 250, 0.5f);
             }
             Instance.yPos += _dt * speed;
+        }
+
+        if (ControlScheme == 1) {
+            if (values[0] > 0) {
+                // Left
+                if (PlayerEntity.Create().GetPosX() > 0)
+                    PlayerEntity.Create().SetPosX((int) (PlayerEntity.Create().GetPosX() - (Math.abs(values[0]) * 200 * _dt)));
+                else
+                    PlayerEntity.Create().SetPosX(0);
+
+            } else if (values[0] < 0) {
+                //Right
+                if (PlayerEntity.Create().GetPosX() < ScreenWidth)
+                    PlayerEntity.Create().SetPosX((int) (PlayerEntity.Create().GetPosX() + (Math.abs(values[0]) * 200 * _dt)));
+                else
+                    PlayerEntity.Create().SetPosX(ScreenWidth);
+            }
         }
 
         iTotalScore = (yPos/10) + iEnemyKillScore;
@@ -236,6 +273,19 @@ public class PlayerEntity implements EntityBase, Collidable {
     @Override
     public void OnHit(Collidable _other) {
 
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        // Many sensors return 3 values, one for each axis
+        // Do something with this sensor value
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+            values = sensorEvent.values;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        // Do something here if sensor accuracy changes
     }
 
     public void Destroy(){

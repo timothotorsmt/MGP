@@ -3,6 +3,8 @@ package com.sdm.mgpica;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.SurfaceView;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 // Created by TanSiewLan2021
 

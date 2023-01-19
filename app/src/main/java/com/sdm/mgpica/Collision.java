@@ -21,7 +21,6 @@ public class Collision {
         return true;
     }
 
-    // TODO: Actually try to see if it works
     public static boolean AABBtoAABB (AABB a, AABB b)
     {
         if(a.minX < b.minX + b.width &&

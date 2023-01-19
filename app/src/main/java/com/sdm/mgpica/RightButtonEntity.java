@@ -51,7 +51,7 @@ public class RightButtonEntity implements EntityBase {
     public void Update(float _dt) {
         buttonDelay += _dt;
 
-        if (TouchManager.Instance.HasTouch()){
+        if (TouchManager.Instance.HasTouch() && PlayerEntity.Create().ControlScheme != 1){
             if (!GameSystem.Instance.GetIsPaused()) {
                 float imgRadius = sbmp.getHeight() * 0.5f;
 
@@ -68,8 +68,10 @@ public class RightButtonEntity implements EntityBase {
     }
 
     public void Render(Canvas _canvas) {
-        _canvas.drawBitmap(sbmp, xPos - sbmp.getWidth() * 0.5f,
-                yPos - sbmp.getHeight() * 0.5f, null);
+        if (PlayerEntity.Create().ControlScheme != 1) {
+            _canvas.drawBitmap(sbmp, xPos - sbmp.getWidth() * 0.5f,
+                    yPos - sbmp.getHeight() * 0.5f, null);
+        }
     }
 
     public boolean IsInit(){
