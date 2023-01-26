@@ -35,6 +35,9 @@ public class GameSystem {
         StateManager.Instance.AddState(new MainGameSceneState());
         StateManager.Instance.AddState(new Settings());
         StateManager.Instance.AddState(new Losescreen());
+
+        GameSystem.Instance.SaveEditBegin();
+        GameSystem.Instance.SaveEditEnd();
     }
 
     public void SetIsPaused(boolean _newIsPaused)
@@ -72,7 +75,18 @@ public class GameSystem {
 
     public int GetIntFromSave(String _key)
     {
-        return sharedPref.getInt(_key, 10);
+        return sharedPref.getInt(_key, 0);
     }
 
+    public void SetStringInSave(String _key, String m_text) {
+        if (editor == null)
+            return;
+
+        editor.putString(_key, m_text);
+    }
+
+    public String GetStringFromSave(String _key)
+    {
+        return sharedPref.getString(_key, "");
+    }
 }

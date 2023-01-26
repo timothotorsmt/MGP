@@ -6,10 +6,13 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 // Written by Tan Sze Ting
 
@@ -17,7 +20,12 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
     //Define buttons
     private Button btn_menu;
-    private TextView highscore;
+    private TextView name;
+    private TextView score;
+
+    private TextView num1;
+    private TextView num2;
+    private TextView num3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +43,20 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         btn_menu = (Button)findViewById(R.id.menuButton);
         btn_menu.setOnClickListener(this); //Set Listener to this button --> Start Button
 
-        highscore = (TextView)findViewById(R.id.highscoreTxt);
-        highscore.setText("High Score: "+GameSystem.Instance.GetIntFromSave("Highscore"));
+        score = (TextView)findViewById(R.id.scoreTxt);
+        score.setText(String.valueOf(GameSystem.Instance.GetIntFromSave("Score")));
 
-        StateManager.Instance.AddState(new Losescreen());
+        name = (TextView)findViewById(R.id.nameTxt);
+        name.setText(GameSystem.Instance.GetStringFromSave("Name"));
+
+        num1 = (TextView)findViewById(R.id.num1Score);
+        num1.setText(GameSystem.Instance.GetStringFromSave("Num1Str"));
+
+        num2 = (TextView)findViewById(R.id.num2Score);
+        num2.setText(GameSystem.Instance.GetStringFromSave("Num2Str"));
+
+        num3 = (TextView)findViewById(R.id.num3Score);
+        num3.setText(GameSystem.Instance.GetStringFromSave("Num3Str"));
     }
 
     @Override
@@ -49,20 +67,16 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         // Intent is an object provides runtime binding.
         // new instance of this object intent
 
-        Intent intent = new Intent();
-
         if (v == btn_menu)
         {
-            //Intent intent = new Intent();
+            Intent intent = new Intent();
             // intent --> to set to another class which another page or screen that we are launching.
-            //intent.setClass(this, Mainmenu.class);
             finish();
             intent.setClass(this, Mainmenu.class);
                 StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
 
-            PlayerEntity.Create().iHealth = 100;
+            startActivity(intent);
         }
-        startActivity(intent);
     }
 
     @Override
@@ -105,3 +119,71 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         super.onDestroy();
     }
 }
+
+/*
+ {
+
+    private TextView tv_score;
+    private EditText ed_text;
+    private Button bt_apply;
+    private Button bt_save;
+
+    public static final String SHARED_PREFS = "SharePref";
+    public static final String TEXT = "text";
+
+    private String text;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Hide Title
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Hide Top Bar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.leaderboard);
+
+        tv_score = (TextView) findViewById(R.id.tv_score);
+        ed_text = (EditText) findViewById(R.id.ed_text);
+        bt_apply = (Button) findViewById(R.id.btn_apply);
+        bt_save = (Button) findViewById(R.id.btn_save);
+
+        bt_apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_score.setText(ed_text.getText().toString());
+            }
+        });
+
+        bt_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                savedData();
+            }
+        });
+
+        loadData();
+        updateViews();
+    }
+
+    public void savedData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(TEXT, tv_score.getText().toString());
+
+        editor.apply();
+
+        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        text = sharedPreferences.getString(TEXT, "");
+    }
+
+    public void updateViews() {
+        tv_score.setText(text);
+    }
+}
+ */

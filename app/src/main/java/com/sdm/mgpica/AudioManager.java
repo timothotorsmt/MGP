@@ -55,6 +55,6 @@ public class AudioManager {
             entry.getValue().reset();
             entry.getValue().release();
         }
+        audioMap.clear();
     }
-    //audioMap.clear();
 }

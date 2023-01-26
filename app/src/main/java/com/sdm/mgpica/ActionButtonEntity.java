@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 import java.util.LinkedList;
 
 public class ActionButtonEntity implements EntityBase {
+    private static ActionButtonEntity Instance = null;
 
     private Bitmap bmp = null;
     private Bitmap sbmp = null;
@@ -30,7 +31,6 @@ public class ActionButtonEntity implements EntityBase {
     private boolean Toggle = true;
 
     private boolean isInit = false;
-    static ActionButtonEntity Instance = null;
 
     public boolean IsDone() {
         return isDone;
