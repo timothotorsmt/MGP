@@ -81,7 +81,7 @@ public class MainGameSceneState implements StateBase {
             }
 
             if (!AudioManager.Instance.IsPlaying(R.raw.bgm)) // bgm loop
-                AudioManager.Instance.PlayAudio(R.raw.bgm, 0.8f);
+                AudioManager.Instance.PlayAudio(R.raw.bgm, GamePage.Instance.Volume/100);
 
             EntityManager.Instance.Update(_dt);
         }
@@ -93,6 +93,4 @@ public class MainGameSceneState implements StateBase {
         //}
     }
 }
-
-
 
