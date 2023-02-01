@@ -111,6 +111,7 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
 
         btn_sharescore = findViewById(R.id.btn_sharescore);
+        btn_sharescore.setOnClickListener(this);
 
         profile_pic = findViewById(R.id.picture);
 
