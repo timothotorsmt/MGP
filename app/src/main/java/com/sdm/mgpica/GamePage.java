@@ -13,7 +13,9 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class GamePage extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class GamePage extends AppCompatActivity {
 
     public static GamePage Instance = null;
     public boolean Controls = false;
@@ -26,6 +28,7 @@ public class GamePage extends Activity {
         //To make fullscreen
         requestWindowFeature(Window.FEATURE_NO_TITLE); // Hide titlebar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  // Hide topbar
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 
         Instance = this;
 
@@ -37,7 +40,6 @@ public class GamePage extends Activity {
         // the very first time when the app is opened, there is nothing to show
         Controls = sh.getBoolean("controls", false);
         Volume = sh.getInt("volume", 100);
-
 
         setContentView(new GameView(this)); // Surfaceview = GameView
     }

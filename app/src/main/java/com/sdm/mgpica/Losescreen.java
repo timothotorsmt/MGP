@@ -2,6 +2,7 @@ package com.sdm.mgpica;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.SurfaceView;
@@ -13,6 +14,41 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
+
+// FACEBOOK STUFF
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.LoggingBehavior;
+import com.facebook.Profile;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
+
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
+
+import java.util.Arrays;
+// FACEBOOK
+
 
 // Written by Tan Sze Ting
 
@@ -27,9 +63,30 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
     private TextView num2;
     private TextView num3;
 
+    // FACEBOOK
+    private Button btn_sharescore;
+
+    private CallbackManager callbackManager;
+    private LoginManager loginManager;
+
+    private static final String EMAIL = "email";
+
+    private LoginButton btn_fbLogin;
+
+    private ShareDialog share_Dialog;
+    private int PICK_IMAGE_REQUEST = 1;
+
+    //Share Dialog shareDialog
+    ProfilePictureView profile_pic;
+    // FACEBOOK
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FacebookSdk.setApplicationId("573356071042478");
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.isInitialized();
 
         // Hide Title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -39,6 +96,45 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.losescreen);
+        // FACEBOOK
+
+        if(BuildConfig.DEBUG) {
+            FacebookSdk.setIsDebugEnabled(true);
+            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+        }
+
+        //Typeface myfont;
+        //myfont = Typeface.createFromAsset(getAssets(), "fonts/arcadia.otf");
+
+        btn_fbLogin = (LoginButton) findViewById(R.id.fb_login_button);
+        btn_fbLogin.setReadPermissions(Arrays.asList(EMAIL));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+
+        btn_sharescore = findViewById(R.id.btn_sharescore);
+
+        profile_pic = findViewById(R.id.picture);
+
+        callbackManager = CallbackManager.Factory.create();
+
+        loginManager = LoginManager.getInstance();
+
+        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                profile_pic.setProfileId(Profile.getCurrentProfile().getId());
+
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                loginResult.getAccessToken().getUserId();
+            }
+            @Override
+            public void onCancel() {System.out.println("Login attempt cancelled.");}
+
+            @Override
+            public void onError(FacebookException e) {
+                System.out.println("Login attempt failed.");
+            }
+        });
+        // FACEBOOK
 
         btn_menu = (Button)findViewById(R.id.menuButton);
         btn_menu.setOnClickListener(this); //Set Listener to this button --> Start Button
@@ -76,6 +172,9 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
                 StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
 
             startActivity(intent);
+        }
+        if (v == btn_sharescore) {
+            shareScore();
         }
     }
 
@@ -118,72 +217,30 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
     protected void onDestroy() {
         super.onDestroy();
     }
-}
 
-/*
- {
+    // FACEBOOK
+    public void shareScore(){
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
-    private TextView tv_score;
-    private EditText ed_text;
-    private Button bt_apply;
-    private Button bt_save;
+        if(ShareDialog.canShow(SharePhotoContent.class)) {
+            System.out.println("photoShown");
+            SharePhoto photo = new SharePhoto.Builder()
+                    .setBitmap(image)
+                    .setCaption("Thank you for playing MGP2021. Your final score is " + GameSystem.Instance.GetIntFromSave("Score"))
+                    .build();
 
-    public static final String SHARED_PREFS = "SharePref";
-    public static final String TEXT = "text";
+            SharePhotoContent content = new SharePhotoContent.Builder()
+                    .addPhoto(photo)
+                    .build();
 
-    private String text;
+            share_Dialog.show(content);
+        }
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Hide Title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // Hide Top Bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.leaderboard);
-
-        tv_score = (TextView) findViewById(R.id.tv_score);
-        ed_text = (EditText) findViewById(R.id.ed_text);
-        bt_apply = (Button) findViewById(R.id.btn_apply);
-        bt_save = (Button) findViewById(R.id.btn_save);
-
-        bt_apply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tv_score.setText(ed_text.getText().toString());
-            }
-        });
-
-        bt_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                savedData();
-            }
-        });
-
-        loadData();
-        updateViews();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-    public void savedData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString(TEXT, tv_score.getText().toString());
-
-        editor.apply();
-
-        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show();
-    }
-
-    public void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        text = sharedPreferences.getString(TEXT, "");
-    }
-
-    public void updateViews() {
-        tv_score.setText(text);
-    }
+    // FACEBOOK
 }
- */
