@@ -8,20 +8,20 @@
 
     <Button
         android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="256dp"
+        android:layout_height="51dp"
         android:layout_weight="1"
         android:background="@drawable/button"
         android:fontFamily="@font/arcadia"
-        android:text="back"
+        android:text="Save and apply"
         android:textColor="@color/white"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.404" />
+        app:layout_constraintVertical_bias="0.591" />
 
     <Switch
         android:id="@+id/control_toggle"
@@ -35,12 +35,26 @@
         android:fontFamily="@font/arcadia"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Switch
+        android:id="@+id/vibration_toggle"
+        android:layout_width="245dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="220dp"
+        android:fontFamily="@font/arcadia"
+        android:text="Enable vibrations"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <SeekBar
         android:id="@+id/VolumeBar"
         android:layout_width="148dp"
         android:layout_height="29dp"
         android:layout_marginTop="168dp"
         android:backgroundTint="@color/white"
+        android:progressBackgroundTint="@color/white"
+        android:thumb="@drawable/scrollbar_handle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.684"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +70,7 @@
         android:text="Volume"
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/VolumeBar"
-        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

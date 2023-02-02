@@ -13,11 +13,18 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
+
 public class GamePage extends Activity {
 
     public static GamePage Instance = null;
     public boolean Controls = false;
+    public boolean Vibration = false;
     public int Volume = 100;
+    public int LeaderboardSize = 0;
+    public ArrayList<String> Scores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,7 @@ public class GamePage extends Activity {
         // the very first time when the app is opened, there is nothing to show
         Controls = sh.getBoolean("controls", false);
         Volume = sh.getInt("volume", 100);
-
+        Vibration = sh.getBoolean("Vibration", true);
 
         setContentView(new GameView(this)); // Surfaceview = GameView
     }

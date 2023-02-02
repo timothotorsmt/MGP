@@ -7,21 +7,23 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
 
+import java.util.Random;
+
 // Written by Tan Sze Ting
 // Edited by Timothy Luk
 
-public class ProjectileEntity implements EntityBase, Collidable {
+public class PowerupEntity implements EntityBase, Collidable {
     // Comment for now and use if code from Slide no 7 is type in
     int ScreenWidth, ScreenHeight;
 
     private Bitmap bmp = null;
     private Bitmap sbmp = null;
-    private Sprite spritesheet = null; // using Sprite class
 
     private boolean isDone = false;
     private int xPos = 0, yPos = 0;
+    private int xOffset =0;
+    private float oscillation = 0;
     public float width = 150;
-    public int bulletType = 1;
 
     private boolean isInit = false;
     private boolean hasTouched = false;
@@ -42,20 +44,15 @@ public class ProjectileEntity implements EntityBase, Collidable {
         ScreenWidth = metrics.widthPixels;
         ScreenHeight = metrics.heightPixels;
 
-        xPos = (int) PlayerEntity.Create().GetPosX();
-        yPos = (int) PlayerEntity.Create().GetPosY();
+        Random rand = new Random();
+        xOffset = ScreenWidth / 2;
+        yPos = (int) ScreenHeight * 2 - 50;
+
 
         bmp = BitmapFactory.decodeResource(_view.getResources(),
-                R.drawable.projectile);
-        sbmp = Bitmap.createScaledBitmap(bmp, (int)width,
-                (int)width,true);
-        //spritesheet = new Sprite(bmp, 4,4, 16);
+                R.drawable.powerup);
 
-        //spritesheet = new Sprite(BitmapFactory.decodeResource(_view.getResources(),
-        //                R.drawable.smurf_sprite), 4,4, 16);
-
-        spritesheet = new Sprite(sbmp,
-                1,1, 16);
+        sbmp = Bitmap.createScaledBitmap(bmp, (int) (ScreenWidth/8), (ScreenWidth/8), true);
 
         isInit = true;
     }
@@ -64,29 +61,40 @@ public class ProjectileEntity implements EntityBase, Collidable {
         if (GameSystem.Instance.GetIsPaused())
             return;
 
-        if (bulletType == 2) {
-            yPos += _dt * 700;
-            xPos += _dt * 100;
-        }
-        else if (bulletType == 3) {
-            yPos += _dt * 700;
-            xPos -= _dt * 100;
-        }
-        else {
-            yPos += _dt * 750;
-        }
+        yPos -= _dt * 200;
+        oscillation += _dt;
+        xPos = (int) (Math.sin(oscillation) * (ScreenWidth / 3) + xOffset);
 
-        spritesheet.Update(_dt);
-
-        if (PlayerEntity.Create().yPosOnScreen+yPos-PlayerEntity.Create().GetPosY() > (ScreenHeight - 300)) {
-            ActionButtonEntity.Create().projectileEntities.remove(this);
-            System.out.print(ActionButtonEntity.Create().projectileEntities.size());
+        if ((yPos) < 0) {
             SetIsDone(true);
         }
     }
 
+    public boolean collision(){
+        // Collision (i think)
+        AABB playerAABB = new AABB();
+        playerAABB.minX = PlayerEntity.Create().GetPosX();
+        playerAABB.minY = PlayerEntity.Create().yPosOnScreen;
+        playerAABB.height = PlayerEntity.Create().width;
+        playerAABB.width = PlayerEntity.Create().width;
+
+        AABB enemyAABB = new AABB();
+        enemyAABB.minX = xPos;
+        enemyAABB.minY = yPos - PlayerEntity.Create().GetPosY();
+        enemyAABB.width = width * 2;
+        enemyAABB.height = width * 2;
+
+        if (Collision.AABBtoAABB(playerAABB, enemyAABB)) {
+            PlayerEntity.Create().PlayerMode = 2;
+            SetIsDone(true);
+            xOffset = (int) (ScreenWidth * 1.5);
+        }
+
+        return true;
+    }
+
     public void Render(Canvas _canvas) {
-        spritesheet.Render(_canvas, xPos, (int) (PlayerEntity.Create().yPosOnScreen+yPos-PlayerEntity.Create().GetPosY()));
+        _canvas.drawBitmap(sbmp, xPos, (int) (yPos - PlayerEntity.Create().GetPosY()), null);
     }
 
     public boolean IsInit(){
@@ -107,8 +115,8 @@ public class ProjectileEntity implements EntityBase, Collidable {
         return ENTITY_TYPE.ENT_PROJECTILE;
     }
 
-    public static ProjectileEntity Create(){
-        ProjectileEntity result = new ProjectileEntity();
+    public static PowerupEntity Create(){
+        PowerupEntity result = new PowerupEntity();
         EntityManager.Instance.AddEntity(result,ENTITY_TYPE.ENT_PROJECTILE);
         return result;
     }

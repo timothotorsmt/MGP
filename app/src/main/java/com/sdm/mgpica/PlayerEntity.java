@@ -36,8 +36,13 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
 
     private boolean isDone = false;
     private int xPos = 0, yPos = 0;
+    public int xPrevPos = 0, yPrevPos = 0;
     public int yPosOnScreen = 600;
     public int idealyPosOnScreen = 600;
+
+    public int PlayerMode = 1;
+    public float PowerupTimer = 0f;
+    public float PowerupMaxTimer = 10.0f;
 
     public int AmmoNumber = 8;
     public int MaxAmmoNumber = 8;
@@ -47,6 +52,7 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
 
     public float speed = 0;
     public int ControlScheme = 1;
+    public boolean setVibration = true;
 
     public boolean isMidair = true;
     public boolean isStalling = true;
@@ -95,7 +101,8 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
         sensorManager.registerListener(this, sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0), SensorManager.SENSOR_DELAY_NORMAL);
 
         ControlScheme = (GamePage.Instance.Controls == true ? 1 : 0);
-        
+        setVibration = (GamePage.Instance.Vibration);
+
         bmp_jump = BitmapFactory.decodeResource(_view.getResources(),
                 R.drawable.player_jump);
         sbmp_jump = Bitmap.createScaledBitmap(bmp_jump, (int)width,
@@ -114,8 +121,14 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
         if (GameSystem.Instance.GetIsPaused())
             return;
 
-        spritesheet.Update(_dt);
+        if (PlayerMode == 2 && PowerupMaxTimer > PowerupTimer) {
+            PowerupTimer += _dt;
+        } else if (PlayerMode == 2 && PowerupTimer > PowerupMaxTimer) {
+            PlayerMode = 1;
+            PowerupTimer = 0;
+        }
 
+        spritesheet.Update(_dt);
 
         if (Math.abs(yPosOnScreen - idealyPosOnScreen) > 0.1) {
             yPosOnScreen = (int)LinearInterpolation.Lerp(yPosOnScreen, idealyPosOnScreen, 0.5f);
@@ -192,6 +205,8 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
         //    }
         //}
         // addon codes provide on slides from Week 6 -- Slide no.7
+
+        xPrevPos = this.xPos;
     }
 
     public void Render(Canvas _canvas) {
@@ -265,6 +280,7 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
     }
 
     public void SetPosX(int xPos) {
+        xPrevPos = this.xPos;
         this.xPos = xPos;
     }
 

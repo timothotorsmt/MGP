@@ -101,7 +101,10 @@ public class EnemyEntity implements EntityBase, Collidable {
 
         //i could have used sphere to sphere wait...
         if (Collision.AABBtoAABB(playerAABB, enemyAABB)) {
-            startVibrate();
+            if (GamePage.Instance.Vibration) {
+                startVibrate();
+            }
+
             if (enemyAABB.minY - playerAABB.minY > ((playerAABB.height / 2) + 50)) {
                 // stomp and die bitch
                 PlayerEntity.Create().SetStall();
@@ -131,7 +134,10 @@ public class EnemyEntity implements EntityBase, Collidable {
             ProjectileAABB.width = pe.width;
 
             if (Collision.AABBtoAABB(ProjectileAABB, enemyAABB)) {
-                startVibrate();
+                if (GamePage.Instance.Vibration) {
+                    startVibrate();
+                }
+
                 xPos = -100;
                 SetIsDone(true);
                 pe.SetPosX(-100);

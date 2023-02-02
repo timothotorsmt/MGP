@@ -16,17 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 // Written by Tan Sze Ting
 
-public class Losescreen extends Activity implements View.OnClickListener, StateBase {  //Using StateBase class
+public class LeaderboardScreen extends Activity implements View.OnClickListener, StateBase {  //Using StateBase class
 
     //Define buttons
     private Button btn_menu;
-    private Button btn_save;
 
+    private TextView name;
     private TextView score;
 
     private TextView num1;
-    private TextView beforeScore;
-    private TextView yourScore;
+    private TextView num2;
+    private TextView num3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +44,10 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         btn_menu = (Button)findViewById(R.id.menuButton);
         btn_menu.setOnClickListener(this); //Set Listener to this button --> Start Button
 
-        btn_save = (Button)findViewById(R.id.saveButton);
-        btn_save.setOnClickListener(this); //Set Listener to this button --> Start Button
-
         score = (TextView)findViewById(R.id.scoreTxt);
         score.setText(String.valueOf(GameSystem.Instance.GetIntFromSave("Score")));
 
-        num1 = (TextView)findViewById(R.id.num1Score);
-        num1.setText(GameSystem.Instance.GetStringFromSave("Num1Str"));
 
-        beforeScore = (TextView)findViewById(R.id.beforeScoreNum);
-        beforeScore.setText(GameSystem.Instance.GetStringFromSave("Num2Str"));
-
-        yourScore = (TextView)findViewById(R.id.yourScore);
-        yourScore.setText(String.valueOf(GameSystem.Instance.GetIntFromSave("Score")));
     }
 
     @Override
@@ -74,17 +64,9 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
             // intent --> to set to another class which another page or screen that we are launching.
             finish();
             intent.setClass(this, Mainmenu.class);
-                StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
+            StateManager.Instance.ChangeState("Mainmenu"); // Default is like a loading page
 
             startActivity(intent);
-        }
-        if (v == btn_save)
-        {
-            if (NameInputDialogFragment.IsShown)
-                return;
-
-            NameInputDialogFragment newNameInput = new NameInputDialogFragment();
-            newNameInput.show(getFragmentManager(), "NameInput");
         }
     }
 

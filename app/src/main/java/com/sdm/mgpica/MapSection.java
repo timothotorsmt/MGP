@@ -42,8 +42,8 @@ public class MapSection {
         }
 
         for (int i = 0; i < 4; i++) {
-            int Seed = rand.nextInt(3);
-            if (Seed < 2) {
+            int Seed = rand.nextInt(5);
+            if (Seed < 4) {
                 for (int j = 0; j < 9; j++) {
                     Section[i][j] = 0;
                 }
@@ -72,10 +72,10 @@ public class MapSection {
                 }
                 int CWGap = (9 - LwallNum - RwallNum);
                 int BreakableNum = rand.nextInt(CWGap * 2);
-                int WallGap = 0;
+                int LWallGap = 0;
                 if (BreakableNum < CWGap) {
-                    WallGap = rand.nextInt(CWGap - BreakableNum);
-                    for (int j = LwallNum + WallGap; j < BreakableNum; j++) {
+                    LWallGap = rand.nextInt(CWGap - BreakableNum);
+                    for (int j = LwallNum + LWallGap; j < BreakableNum; j++) {
                         Section[i][8-j] = 2;
                     }
                 }

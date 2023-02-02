@@ -41,7 +41,7 @@ public class NameInputDialogFragment extends DialogFragment{
 
                 LeaderboardSort();
 
-                GamePage.Instance.toLossScreen();
+                //GamePage.Instance.toLossScreen();
             }
         });
         return builder.create();
