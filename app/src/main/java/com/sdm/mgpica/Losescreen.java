@@ -41,6 +41,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
+import com.facebook.share.Sharer;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
@@ -175,15 +176,31 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
             startActivity(intent);
         }
-        if (v == btn_save)
-        {
+        if (v == btn_save) {
             if (NameInputDialogFragment.IsShown)
                 return;
 
             NameInputDialogFragment newNameInput = new NameInputDialogFragment();
             newNameInput.show(getFragmentManager(), "NameInput");
+        }
         if (v == btn_sharescore) {
-            shareScore();
+            share_Dialog = new ShareDialog(Losescreen.this);
+            share_Dialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+                @Override
+                public void onSuccess(Sharer.Result result) {
+                    shareScore();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+
+                @Override
+                public void onError(FacebookException e) {
+
+                }
+            });
         }
     }
 
@@ -228,7 +245,7 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
     }
 
     // FACEBOOK
-    public void shareScore(){
+    public void shareScore() {
         Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
         if(ShareDialog.canShow(SharePhotoContent.class)) {
