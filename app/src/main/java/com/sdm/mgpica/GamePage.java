@@ -16,8 +16,9 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class GamePage extends Activity {
+public class GamePage extends AppCompatActivity {
 
     public static GamePage Instance = null;
     public boolean Controls = false;
@@ -33,6 +34,7 @@ public class GamePage extends Activity {
         //To make fullscreen
         requestWindowFeature(Window.FEATURE_NO_TITLE); // Hide titlebar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  // Hide topbar
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 
         Instance = this;
 
