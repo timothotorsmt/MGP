@@ -94,6 +94,8 @@ public class BlockEntity implements EntityBase, Collidable {
             //    PlayerEntity.Create().SetPosX((int)(platformAABB.minX + platformAABB.width / 1.5));
             //}
 
+            PlayerEntity.Create().SetPosX(PlayerEntity.Create().xPrevPos);
+
             if (platformAABB.minY + playerAABB.minY> (playerAABB.height - 10)) {
                 PlayerEntity.Create().AmmoNumber = PlayerEntity.Create().MaxAmmoNumber;
                 return false;
@@ -188,7 +190,7 @@ public class BlockEntity implements EntityBase, Collidable {
 
     @Override
     public float GetRadius() {
-        return 0;
+        return ScreenHeight / 10;
     }
 
     @Override

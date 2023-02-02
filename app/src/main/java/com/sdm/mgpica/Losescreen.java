@@ -56,12 +56,13 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
     //Define buttons
     private Button btn_menu;
-    private TextView name;
+    private Button btn_save;
+
     private TextView score;
 
     private TextView num1;
-    private TextView num2;
-    private TextView num3;
+    private TextView beforeScore;
+    private TextView yourScore;
 
     // FACEBOOK
     private Button btn_sharescore;
@@ -140,20 +141,20 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         btn_menu = (Button)findViewById(R.id.menuButton);
         btn_menu.setOnClickListener(this); //Set Listener to this button --> Start Button
 
+        btn_save = (Button)findViewById(R.id.saveButton);
+        btn_save.setOnClickListener(this); //Set Listener to this button --> Start Button
+
         score = (TextView)findViewById(R.id.scoreTxt);
         score.setText(String.valueOf(GameSystem.Instance.GetIntFromSave("Score")));
-
-        name = (TextView)findViewById(R.id.nameTxt);
-        name.setText(GameSystem.Instance.GetStringFromSave("Name"));
 
         num1 = (TextView)findViewById(R.id.num1Score);
         num1.setText(GameSystem.Instance.GetStringFromSave("Num1Str"));
 
-        num2 = (TextView)findViewById(R.id.num2Score);
-        num2.setText(GameSystem.Instance.GetStringFromSave("Num2Str"));
+        beforeScore = (TextView)findViewById(R.id.beforeScoreNum);
+        beforeScore.setText(GameSystem.Instance.GetStringFromSave("Num2Str"));
 
-        num3 = (TextView)findViewById(R.id.num3Score);
-        num3.setText(GameSystem.Instance.GetStringFromSave("Num3Str"));
+        yourScore = (TextView)findViewById(R.id.yourScore);
+        yourScore.setText(String.valueOf(GameSystem.Instance.GetIntFromSave("Score")));
     }
 
     @Override
@@ -174,6 +175,13 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
             startActivity(intent);
         }
+        if (v == btn_save)
+        {
+            if (NameInputDialogFragment.IsShown)
+                return;
+
+            NameInputDialogFragment newNameInput = new NameInputDialogFragment();
+            newNameInput.show(getFragmentManager(), "NameInput");
         if (v == btn_sharescore) {
             shareScore();
         }

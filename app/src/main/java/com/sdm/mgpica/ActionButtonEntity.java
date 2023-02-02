@@ -81,6 +81,14 @@ public class ActionButtonEntity implements EntityBase {
                                 // Jump/Shoot
                                 ProjectileEntity pe = ProjectileEntity.Create();
                                 projectileEntities.add(pe);
+                                if (PlayerEntity.Create().PlayerMode == 2) {
+                                    ProjectileEntity pe1 = ProjectileEntity.Create();
+                                    pe1.bulletType = 2;
+                                    projectileEntities.add(pe1);
+                                    ProjectileEntity pe2 = ProjectileEntity.Create();
+                                    pe2.bulletType = 3;
+                                    projectileEntities.add(pe2);
+                                }
                                 PlayerEntity.Create().AmmoNumber--;
                                 PlayerEntity.Create().SetStall();
                             } else {

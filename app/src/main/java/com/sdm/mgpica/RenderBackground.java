@@ -9,6 +9,7 @@ import android.view.SurfaceView;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 
 // Written by Timothy and Sze Ting
 // Written by Timothy (platform generation)
@@ -24,6 +25,7 @@ public class RenderBackground implements EntityBase {
 
     // Singleton Instance
     private LinkedList<BlockEntity> platforms = new LinkedList<>();
+    private LinkedList<PowerupEntity> powerup = new LinkedList<>();
     float timer = 0;
     float lastPlayerY = 0.0f;
 
@@ -34,6 +36,7 @@ public class RenderBackground implements EntityBase {
     private Bitmap scaledbmp3 = null;
 
     boolean HasWallInit = false;
+    float interval = 0;
 
     public boolean IsDone() {
         return isDone;
@@ -157,6 +160,16 @@ public class RenderBackground implements EntityBase {
 
         }
 
+        if (-playerY > interval) {
+            Random rand = new Random();
+            int randInterval = rand.nextInt(2) + 1;
+            interval = -playerY + ScreenHeight / 2 * randInterval;
+
+            // Spawn a powerup
+            PowerupEntity temp_powerup = PowerupEntity.Create();
+            powerup.add(temp_powerup);
+        }
+
         boolean isCollision = PlatformCollisions();
 
         PlayerEntity.Create().isMidair = isCollision;
@@ -169,6 +182,10 @@ public class RenderBackground implements EntityBase {
             if (be.collision() == false) {
                 playerMove = false;
             }
+        }
+
+        for (PowerupEntity pe : powerup) {
+            pe.collision();
         }
 
         return playerMove;
@@ -195,6 +212,7 @@ public class RenderBackground implements EntityBase {
     public void SetRenderLayer(int _newLayer) {
 
     }
+
     public int GetRenderLayer() {
         return LayerConstants.BACKGROUND_LAYER;
     }

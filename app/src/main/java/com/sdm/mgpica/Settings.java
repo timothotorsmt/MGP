@@ -23,6 +23,7 @@ public class Settings extends Activity implements OnClickListener, StateBase {  
     //Define buttons
     private Button btn_back;
     private Switch control_toggle;
+    private Switch vibration_toggle;
     private SeekBar volume;
 
     @Override
@@ -42,6 +43,7 @@ public class Settings extends Activity implements OnClickListener, StateBase {  
         btn_back.setOnClickListener(this); //Set Listener to this button --> Start Button
 
         control_toggle = (Switch)findViewById(R.id.control_toggle);
+        vibration_toggle = (Switch)findViewById(R.id.vibration_toggle);
         // Retrieving the value using its keys the file name
         // must be same in both saving and retrieving the data
         SharedPreferences sh = getSharedPreferences("com.sdm.mgpica.sharedpreferences", MODE_PRIVATE);
@@ -50,6 +52,9 @@ public class Settings extends Activity implements OnClickListener, StateBase {  
         // the very first time when the app is opened, there is nothing to show
         control_toggle.setChecked(sh.getBoolean("controls", false));
         control_toggle.setOnCheckedChangeListener(this::onCheckedChanged);
+
+        vibration_toggle.setChecked(sh.getBoolean("Vibration", true));
+        vibration_toggle.setOnCheckedChangeListener(this::onCheckedChanged);
 
         volume = (SeekBar)findViewById(R.id.VolumeBar);
         volume.setProgress(sh.getInt("volume", 100));
@@ -152,6 +157,21 @@ public class Settings extends Activity implements OnClickListener, StateBase {  
 
             // Storing the key and its value as the data fetched from edittext
             myEdit.putBoolean("controls", isChecked);
+
+            // Once the changes have been made,
+            // we need to commit to apply those changes made,
+            // otherwise, it will throw an error
+            myEdit.commit();
+        }
+        if (buttonView == vibration_toggle) {
+            // Storing data into SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("com.sdm.mgpica.sharedpreferences",MODE_PRIVATE);
+
+            // Creating an Editor object to edit(write to the file)
+            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+            // Storing the key and its value as the data fetched from edittext
+            myEdit.putBoolean("Vibration", isChecked);
 
             // Once the changes have been made,
             // we need to commit to apply those changes made,
