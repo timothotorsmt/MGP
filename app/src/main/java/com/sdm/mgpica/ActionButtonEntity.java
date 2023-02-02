@@ -79,6 +79,7 @@ public class ActionButtonEntity implements EntityBase {
                                 timer = 0;
 
                                 // Jump/Shoot
+                                AudioManager.Instance.PlayAudio(R.raw.laser, GamePage.Instance.Volume/100);
                                 ProjectileEntity pe = ProjectileEntity.Create();
                                 projectileEntities.add(pe);
                                 if (PlayerEntity.Create().PlayerMode == 2) {

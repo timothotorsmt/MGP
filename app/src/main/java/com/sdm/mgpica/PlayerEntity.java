@@ -15,6 +15,8 @@ import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.SurfaceView;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Switch;
 import android.view.View;
 
@@ -28,7 +30,10 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
 
     private Bitmap bmp = null;
     private Bitmap sbmp = null;
+    private Bitmap blinkbmp = null;
+    private Bitmap sblinkbmp = null;
     private Sprite spritesheet = null; // using Sprite class
+    private Sprite blinkspritesheet = null; // using Sprite class
 
     private Bitmap bmp_jump = null;
     private Bitmap sbmp_jump = null;
@@ -59,6 +64,9 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
     public boolean isJumping = false;
     public boolean isDamagable = true;
 
+    public boolean blink = false;
+    public float damageTimer;
+    public float blinkTimer;
 
     // Temporary Jump Timer
     private float JumpTimer = 0;
@@ -97,6 +105,14 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
         spritesheet = new Sprite(sbmp,
                 1,1, 16);
 
+        blinkbmp = BitmapFactory.decodeResource(_view.getResources(),
+                R.drawable.white);
+        sblinkbmp = Bitmap.createScaledBitmap(blinkbmp, (int)ScreenWidth,
+                (int)ScreenHeight,true);
+
+        blinkspritesheet = new Sprite(sblinkbmp,
+                1,1, 16);
+
         sensorManager = (SensorManager)_view.getContext().getSystemService(Context.SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0), SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -111,6 +127,7 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
         spritesheet_jump = new Sprite(sbmp_jump,
                 1,1, 16);
 
+
         iHealth = 100;
         AmmoNumber = 8;
 
@@ -120,6 +137,29 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
     public void Update(float _dt) {
         if (GameSystem.Instance.GetIsPaused())
             return;
+
+        if (damageTimer > 0)
+        {
+            damageTimer -= _dt;
+            if (damageTimer <= 0) {
+                damageTimer = 0;
+                blink = false;
+            }
+        }
+
+        if (blinkTimer > 0)
+        {
+            blinkTimer -= _dt;
+            if (blinkTimer <= 0) {
+                if (damageTimer > 0)
+                {
+                    blinkTimer = 0.06F;
+                    blink = !blink;
+                }
+                else
+                    blinkTimer = 0;
+            }
+        }
 
         if (PlayerMode == 2 && PowerupMaxTimer > PowerupTimer) {
             PowerupTimer += _dt;
@@ -214,6 +254,11 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
             spritesheet_jump.Render(_canvas, xPos, yPosOnScreen + 50);
         else
             spritesheet.Render(_canvas, xPos, yPosOnScreen + 50);
+
+        if (blink)
+        {
+            blinkspritesheet.Render(_canvas, ScreenWidth/2, ScreenHeight/2);
+        }
     }
 
     public boolean IsInit(){
@@ -291,7 +336,6 @@ public class PlayerEntity implements EntityBase, Collidable, SensorEventListener
 
     @Override
     public void OnHit(Collidable _other) {
-
     }
 
     @Override

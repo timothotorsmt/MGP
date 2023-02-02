@@ -116,6 +116,11 @@ public class EnemyEntity implements EntityBase, Collidable {
             } else {
                 if (PlayerEntity.Create().isDamagable) {
                     //TODO: Set the damagability
+
+                    PlayerEntity.Create().blink = true;
+                    PlayerEntity.Create().damageTimer = 0.42F;
+                    PlayerEntity.Create().blinkTimer = 0.06F;
+
                     PlayerEntity.Create().iHealth -= 25;
                     xPos = -100;
                     SetIsDone(true);

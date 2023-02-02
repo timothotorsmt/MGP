@@ -2,9 +2,14 @@ package com.sdm.mgpica;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewDebug;
@@ -42,11 +47,14 @@ import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
 import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
 import com.facebook.share.widget.ShareDialog;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 // FACEBOOK
 
@@ -84,6 +92,21 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.sdm.mgpica",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        }
+        catch (PackageManager.NameNotFoundException e) {
+        }
+        catch (NoSuchAlgorithmException e) {
+        }
+
         super.onCreate(savedInstanceState);
 
         FacebookSdk.setApplicationId("573356071042478");
@@ -112,19 +135,38 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
         btn_fbLogin.setReadPermissions(Arrays.asList(EMAIL));
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
 
-        btn_sharescore = findViewById(R.id.btn_sharescore);
-        btn_sharescore.setOnClickListener(this);
+        //btn_sharescore = findViewById(R.id.btn_sharescore);
+        //btn_sharescore.setOnClickListener(this);
 
         profile_pic = findViewById(R.id.picture);
 
         callbackManager = CallbackManager.Factory.create();
+
+
+        share_Dialog = new ShareDialog(this);
+        share_Dialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                shareScore();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+
+            }
+        });
 
         loginManager = LoginManager.getInstance();
 
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                profile_pic.setProfileId(Profile.getCurrentProfile().getId());
+                //profile_pic.setProfileId(Profile.getCurrentProfile().getId());
 
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
                 loginResult.getAccessToken().getUserId();
@@ -183,25 +225,9 @@ public class Losescreen extends Activity implements View.OnClickListener, StateB
             NameInputDialogFragment newNameInput = new NameInputDialogFragment();
             newNameInput.show(getFragmentManager(), "NameInput");
         }
-        if (v == btn_sharescore) {
-            share_Dialog = new ShareDialog(Losescreen.this);
-            share_Dialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-                @Override
-                public void onSuccess(Sharer.Result result) {
-                    shareScore();
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-
-                @Override
-                public void onError(FacebookException e) {
-
-                }
-            });
-        }
+        // if (v == btn_sharescore) {
+        //    shareScore();
+        //}
     }
 
     @Override

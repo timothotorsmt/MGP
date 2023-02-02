@@ -74,7 +74,7 @@ public class PauseButtonEntity implements EntityBase {
                     newPauseConfirm.show(GamePage.Instance.getFragmentManager(), "PauseConfirm");
                 }
                 buttonDelay = 0;
-                // GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
+                //GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
             }
         }
         else
@@ -82,14 +82,12 @@ public class PauseButtonEntity implements EntityBase {
     }
 
     public void Render(Canvas _canvas) {
-
-        if (Paused == false)
             _canvas.drawBitmap(sbmp, xPos - sbmp.getWidth() * 0.5f,
                     yPos - sbmp.getHeight() * 0.5f, null);
 
-        else
-            _canvas.drawBitmap(sbmp1, xPos - sbmp1.getWidth() * 0.5f,
-                    yPos - sbmp1.getHeight() * 0.5f, null);
+
+        //    _canvas.drawBitmap(sbmp1, xPos - sbmp1.getWidth() * 0.5f,
+          //          yPos - sbmp1.getHeight() * 0.5f, null);
     }
 
     public boolean IsInit(){

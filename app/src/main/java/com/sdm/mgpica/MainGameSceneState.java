@@ -2,11 +2,14 @@ package com.sdm.mgpica;
 
 import android.app.Activity;
 import android.content.Entity;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceView;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 
 // Created by TanSiewLan2021
 // Edited by Timothy Luk
@@ -82,6 +85,7 @@ public class MainGameSceneState implements StateBase {
 
             EntityManager.Instance.Update(_dt);
         }
+
 
         //if (TouchManager.Instance.IsDown()) {
 			
